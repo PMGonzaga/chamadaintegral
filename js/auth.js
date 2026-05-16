@@ -31,6 +31,9 @@ async function login() {
     } catch(error) {
 
         alert("Login inválido");
+
+    } finally {
+
         esconderLoading();
     }
 }
@@ -58,6 +61,9 @@ async function cadastrar() {
     } catch(error) {
 
         alert(error.message);
+
+    } finally {
+
         esconderLoading();
     }
 }
@@ -66,12 +72,18 @@ async function logout() {
 
     mostrarLoading();
 
-    await signOut(auth);
+    try {
 
-    localStorage.removeItem("logado");
+        await signOut(auth);
 
-    window.location.href = "index.html";
-    esconderLoading();
+        localStorage.removeItem("logado");
+
+        window.location.href = "index.html";
+
+    } finally {
+
+        esconderLoading();
+    }
 }
 
 window.login = login;
