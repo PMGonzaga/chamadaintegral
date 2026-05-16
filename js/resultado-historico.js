@@ -4,21 +4,18 @@ import {
 
 import {
     collection,
-    getDocs
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function carregarHistorico() {
 
-    if(window.mostrarLoading) {
-
-        window.mostrarLoading();
-    }
+    mostrarLoading();
 
     const colete = localStorage.getItem(
         "historicoColete"
-    )
-    .trim()
-    .toLowerCase();
+    ).trim();
 
     const dataInicialString = localStorage.getItem(
         "historicoDataInicial"
@@ -28,23 +25,26 @@ async function carregarHistorico() {
         "historicoDataFinal"
     );
 
-    const dataInicial = new Date(
-        dataInicialString
+    const q = query(
+        collection(db, "chamadas"),
+        where("colete", "==", colete)
     );
 
-    const dataFinal = new Date(
-        dataFinalString
-    );
-
-    const querySnapshot = await getDocs(
-        collection(db, "chamadas")
-    );
+    const querySnapshot = await getDocs(q);
 
     const resultado = document.getElementById(
         "resultado"
     );
 
     resultado.innerHTML = "";
+
+    const dataInicial = new Date(
+        dataInicialString + "T00:00:00"
+    );
+
+    const dataFinal = new Date(
+        dataFinalString + "T23:59:59"
+    );
 
     const diferencaDias = Math.floor(
         (dataFinal - dataInicial)
@@ -58,39 +58,13 @@ async function carregarHistorico() {
 
         const chamada = doc.data();
 
-        const coleteSalvo =
-            chamada.colete
-            .trim()
-            .toLowerCase();
-
-        if(coleteSalvo !== colete) {
-
-            return;
-        }
-
         const dataChamada =
             chamada.data.toDate();
 
-        const ano =
-            dataChamada.getFullYear();
-
-        const mes =
-            String(
-                dataChamada.getMonth() + 1
-            ).padStart(2, "0");
-
-        const dia =
-            String(
-                dataChamada.getDate()
-            ).padStart(2, "0");
-
-        const chamadaFormatada =
-            `${ano}-${mes}-${dia}`;
-
         if(
-            chamadaFormatada >= dataInicialString
+            dataChamada >= dataInicial
             &&
-            chamadaFormatada <= dataFinalString
+            dataChamada <= dataFinal
         ) {
 
             if(diferencaDias === 0) {
@@ -157,10 +131,7 @@ async function carregarHistorico() {
         `;
     }
 
-    if(window.esconderLoading) {
-
-        window.esconderLoading();
-    }
+    esconderLoading();
 }
 
 carregarHistorico();
