@@ -4,127 +4,166 @@ import {
 
 import {
     collection,
-    getDocs
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function carregarHistorico() {
 
     mostrarLoading();
 
-    const colete = localStorage.getItem(
-        "historicoColete"
-    ).trim().toLowerCase();
+    try {
 
-    const dataInicialString = localStorage.getItem(
-        "historicoDataInicial"
-    );
+        const colete = localStorage.getItem(
+            "historicoColete"
+        ).trim();
 
-    const dataFinalString = localStorage.getItem(
-        "historicoDataFinal"
-    );
+        const dataInicialString = localStorage.getItem(
+            "historicoDataInicial"
+        );
 
-    const resultado = document.getElementById(
-        "resultado"
-    );
+        const dataFinalString = localStorage.getItem(
+            "historicoDataFinal"
+        );
 
-    resultado.innerHTML = "";
+        const q = query(
+            collection(db, "chamadas"),
+            where("colete", "==", colete)
+        );
 
-    const pesquisaUnica =
-        dataInicialString === dataFinalString;
+        const querySnapshot = await getDocs(q);
 
-    const querySnapshot = await getDocs(
-        collection(db, "chamadas")
-    );
+        const resultado = document.getElementById(
+            "resultado"
+        );
 
-    const faltasPorAluno = {};
+        resultado.innerHTML = "";
 
-    querySnapshot.forEach((doc) => {
+        const faltasPorAluno = {};
 
-        const chamada = doc.data();
+        querySnapshot.forEach((doc) => {
 
-        const coleteFirebase =
-            chamada.colete
-            .trim()
-            .toLowerCase();
+            const chamada = doc.data();
 
-        if(coleteFirebase !== colete) {
-            return;
-        }
+            const dataChamada =
+                chamada.data.toDate();
 
-        const dataChamada =
-            chamada.dataFormatada;
+            const ano =
+                dataChamada.getFullYear();
+
+            const mes =
+                String(
+                    dataChamada.getMonth() + 1
+                ).padStart(2, "0");
+
+            const dia =
+                String(
+                    dataChamada.getDate()
+                ).padStart(2, "0");
+
+            const dataFormatada =
+                `${ano}-${mes}-${dia}`;
+
+            if(
+                dataFormatada >= dataInicialString
+                &&
+                dataFormatada <= dataFinalString
+            ) {
+
+                if(
+                    dataInicialString ===
+                    dataFinalString
+                ) {
+
+                    resultado.innerHTML += `
+                        <div class="aluno">
+
+                            <span>
+                                ${chamada.nome}
+                            </span>
+
+                            <span>
+                                ${chamada.status}
+                            </span>
+
+                        </div>
+                    `;
+
+                } else {
+
+                    if(
+                        !faltasPorAluno[
+                            chamada.nome
+                        ]
+                    ) {
+
+                        faltasPorAluno[
+                            chamada.nome
+                        ] = 0;
+                    }
+
+                    if(
+                        chamada.status ===
+                        "Falta"
+                    ) {
+
+                        faltasPorAluno[
+                            chamada.nome
+                        ]++;
+                    }
+                }
+            }
+        });
 
         if(
-            dataChamada >= dataInicialString
-            &&
-            dataChamada <= dataFinalString
+            dataInicialString !==
+            dataFinalString
         ) {
 
-            if(pesquisaUnica) {
+            for(
+                const nome
+                in
+                faltasPorAluno
+            ) {
 
                 resultado.innerHTML += `
                     <div class="aluno">
 
                         <span>
-                            ${chamada.nome}
+                            ${nome}
                         </span>
 
                         <span>
-                            ${chamada.status}
+                            ${faltasPorAluno[nome]} faltas
                         </span>
 
                     </div>
                 `;
-
-            } else {
-
-                if(!faltasPorAluno[chamada.nome]) {
-
-                    faltasPorAluno[chamada.nome] = 0;
-                }
-
-                if(chamada.status === "Falta") {
-
-                    faltasPorAluno[chamada.nome]++;
-                }
             }
         }
-    });
 
-    if(!pesquisaUnica) {
+        if(resultado.innerHTML === "") {
 
-        for(const nome in faltasPorAluno) {
-
-            resultado.innerHTML += `
+            resultado.innerHTML = `
                 <div class="aluno">
 
                     <span>
-                        ${nome}
-                    </span>
-
-                    <span>
-                        ${faltasPorAluno[nome]} faltas
+                        Nenhum resultado encontrado
                     </span>
 
                 </div>
             `;
         }
+
+    } catch(error) {
+
+        console.error(error);
+
+    } finally {
+
+        esconderLoading();
     }
-
-    if(resultado.innerHTML === "") {
-
-        resultado.innerHTML = `
-            <div class="aluno">
-
-                <span>
-                    Nenhum resultado encontrado
-                </span>
-
-            </div>
-        `;
-    }
-
-    esconderLoading();
 }
 
 carregarHistorico();
