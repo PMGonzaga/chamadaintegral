@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>Cadastro de Alunos</h1>
+
+        <input type="text" id="nome" placeholder="Nome do aluno">
+        <input type="text" id="turma" placeholder="Turma">
+        <input type="text" id="colete" placeholder="Colete">
+
+        <button onclick="cadastrarAluno()">
+            Cadastrar
+        </button>
+
+        <button onclick="window.location.href='dashboard.html'">
+            Voltar
+        </button>
+
+        <div id="lista-alunos"></div>
+
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/alunos.js"></script>
+</body>
+</html>
