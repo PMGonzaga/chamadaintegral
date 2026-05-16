@@ -1,5 +1,7 @@
 function buscarHistorico() {
 
+    mostrarLoading();
+
     const colete = document.getElementById("colete").value
     .trim();
 
