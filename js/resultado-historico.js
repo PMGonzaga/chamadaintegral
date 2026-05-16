@@ -32,14 +32,6 @@ async function carregarHistorico() {
     const pesquisaUnica =
         dataInicialString === dataFinalString;
 
-    const dataInicial = new Date(
-        dataInicialString + "T00:00:00"
-    );
-
-    const dataFinal = new Date(
-        dataFinalString + "T23:59:59"
-    );
-
     const querySnapshot = await getDocs(
         collection(db, "chamadas")
     );
@@ -60,12 +52,12 @@ async function carregarHistorico() {
         }
 
         const dataChamada =
-            chamada.data.toDate();
+            chamada.dataFormatada;
 
         if(
-            dataChamada >= dataInicial
+            dataChamada >= dataInicialString
             &&
-            dataChamada <= dataFinal
+            dataChamada <= dataFinalString
         ) {
 
             if(pesquisaUnica) {
