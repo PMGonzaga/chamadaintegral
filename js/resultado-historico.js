@@ -44,7 +44,7 @@ async function carregarHistorico() {
 
     resultado.innerHTML = "";
 
-    const diferencaDias = Math.ceil(
+    const diferencaDias = Math.floor(
         (dataFinal - dataInicial)
         /
         (1000 * 60 * 60 * 24)
@@ -74,7 +74,7 @@ async function carregarHistorico() {
             dataChamada <= dataFinal
         ) {
 
-            if(diferencaDias <= 1) {
+            if(diferencaDias === 0) {
 
                 resultado.innerHTML += `
                     <div class="aluno">
