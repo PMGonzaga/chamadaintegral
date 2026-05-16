@@ -1,40 +1,38 @@
+import {
+    db
+} from "./firebase.js";
+
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 let alunos = [];
 
 async function carregarAlunos() {
 
     const colete = document.getElementById("colete").value;
 
-    const formData = new FormData();
-
-    formData.append(
-        "data",
-        JSON.stringify({
-            action: "listarAlunosColete",
-            colete
-        })
+    const q = query(
+        collection(db, "alunos"),
+        where("colete", "==", colete)
     );
 
-    const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData
-    });
+    const querySnapshot = await getDocs(q);
 
-    const data = await response.json();
-
-    alunos = data;
+    alunos = [];
 
     const lista = document.getElementById("lista-chamada");
 
     lista.innerHTML = "";
 
-    if(alunos.length === 0) {
+    querySnapshot.forEach((doc) => {
 
-        lista.innerHTML = `
-            <p>Nenhum aluno encontrado.</p>
-        `;
-
-        return;
-    }
+        alunos.push(doc.data());
+    });
 
     alunos.forEach((aluno, index) => {
 
@@ -42,12 +40,17 @@ async function carregarAlunos() {
             <div class="aluno">
 
                 <span>
-                    ${aluno.nome} - Colete ${aluno.colete}
+                    ${aluno.nome}
                 </span>
 
                 <select id="status-${index}">
-                    <option value="Presente">Presente</option>
-                    <option value="Falta">Falta</option>
+                    <option value="Presente">
+                        Presente
+                    </option>
+
+                    <option value="Falta">
+                        Falta
+                    </option>
                 </select>
 
             </div>
@@ -57,30 +60,26 @@ async function carregarAlunos() {
 
 async function salvarChamada() {
 
-    const chamada = alunos.map((aluno, index) => {
+    for(let index = 0; index < alunos.length; index++) {
 
-        return {
+        const aluno = alunos[index];
+
+        await addDoc(collection(db, "chamadas"), {
+
             nome: aluno.nome,
             turma: aluno.turma,
             colete: aluno.colete,
-            status: document.getElementById(`status-${index}`).value
-        }
-    });
+            status: document.getElementById(
+                `status-${index}`
+            ).value,
 
-    const formData = new FormData();
-
-    formData.append(
-        "data",
-        JSON.stringify({
-            action: "salvarChamada",
-            chamada
-        })
-    );
-
-    await fetch(API_URL, {
-        method: "POST",
-        body: formData
-    });
+            data: new Date()
+        });
+    }
 
     alert("Chamada salva com sucesso");
 }
+
+window.carregarAlunos = carregarAlunos;
+
+window.salvarChamada = salvarChamada;
