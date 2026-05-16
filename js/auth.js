@@ -1,28 +1,72 @@
+import {
+    auth
+} from "./firebase.js";
+
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 async function login() {
 
     const email = document.getElementById("email").value;
+
     const senha = document.getElementById("senha").value;
 
-    const response = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            action: "login",
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
             email,
             senha
-        })
-    });
+        );
 
-    const data = await response.json();
-
-    if(data.success) {
         localStorage.setItem("logado", "true");
+
         window.location.href = "dashboard.html";
-    } else {
+
+    } catch(error) {
+
         alert("Login inválido");
     }
 }
 
-function logout() {
+async function cadastrar() {
+
+    const email = document.getElementById("email").value;
+
+    const senha = document.getElementById("senha").value;
+
+    try {
+
+        await createUserWithEmailAndPassword(
+            auth,
+            email,
+            senha
+        );
+
+        alert("Conta criada com sucesso");
+
+        window.location.href = "index.html";
+
+    } catch(error) {
+
+        alert(error.message);
+    }
+}
+
+async function logout() {
+
+    await signOut(auth);
+
     localStorage.removeItem("logado");
+
     window.location.href = "index.html";
 }
+
+window.login = login;
+
+window.cadastrar = cadastrar;
+
+window.logout = logout;
