@@ -4,15 +4,19 @@ async function carregarAlunos() {
 
     const colete = document.getElementById("colete").value;
 
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `data=${encodeURIComponent(JSON.stringify({
+    const formData = new FormData();
+
+    formData.append(
+        "data",
+        JSON.stringify({
             action: "listarAlunosColete",
             colete
-        }))}`
+        })
+    );
+
+    const response = await fetch(API_URL, {
+        method: "POST",
+        body: formData
     });
 
     const data = await response.json();
@@ -63,15 +67,19 @@ async function salvarChamada() {
         }
     });
 
-    await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `data=${encodeURIComponent(JSON.stringify({
+    const formData = new FormData();
+
+    formData.append(
+        "data",
+        JSON.stringify({
             action: "salvarChamada",
             chamada
-        }))}`
+        })
+    );
+
+    await fetch(API_URL, {
+        method: "POST",
+        body: formData
     });
 
     alert("Chamada salva com sucesso");
