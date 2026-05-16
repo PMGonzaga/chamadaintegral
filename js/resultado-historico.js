@@ -11,6 +11,8 @@ import {
 
 async function carregarHistorico() {
 
+    mostrarLoading();
+
     const colete = localStorage.getItem(
         "historicoColete"
     ).trim();
@@ -60,7 +62,13 @@ async function carregarHistorico() {
             chamada.data.toDate();
 
         const chamadaFormatada =
-            dataChamada.toISOString().split("T")[0];
+            new Date(
+                dataChamada.getTime()
+                -
+                (dataChamada.getTimezoneOffset() * 60000)
+            )
+            .toISOString()
+            .split("T")[0];
 
         if(
             chamadaFormatada >= dataInicialString
@@ -131,6 +139,8 @@ async function carregarHistorico() {
             </div>
         `;
     }
+
+    esconderLoading();
 }
 
 carregarHistorico();
