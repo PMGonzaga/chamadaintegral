@@ -10,6 +10,8 @@ import {
 
 async function cadastrarAluno() {
 
+    mostrarLoading();
+
     const nome = document.getElementById("nome").value;
 
     const turma = document.getElementById("turma").value;
@@ -27,9 +29,12 @@ async function cadastrarAluno() {
     alert("Aluno cadastrado");
 
     listarAlunos();
+    esconderLoading();
 }
 
 async function listarAlunos() {
+
+    mostrarLoading();
 
     const querySnapshot = await getDocs(
         collection(db, "alunos")
@@ -50,6 +55,7 @@ async function listarAlunos() {
                 </span>
             </div>
         `;
+        esconderLoading();
     });
 }
 
