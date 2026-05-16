@@ -50,36 +50,8 @@ async function carregarHistorico() {
                 return;
             }
 
-            let dataObj;
-
-            if(
-                chamada.data
-                &&
-                typeof chamada.data.toDate === "function"
-            ) {
-
-                dataObj = chamada.data.toDate();
-
-            } else {
-
-                dataObj = new Date(chamada.data);
-            }
-
-            const ano =
-                dataObj.getFullYear();
-
-            const mes =
-                String(
-                    dataObj.getMonth() + 1
-                ).padStart(2, "0");
-
-            const dia =
-                String(
-                    dataObj.getDate()
-                ).padStart(2, "0");
-
             const dataRegistro =
-                `${ano}-${mes}-${dia}`;
+                chamada.data;
 
             if(
                 dataRegistro >= dataInicial
