@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Faltas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>Histórico de Faltas</h1>
+
+        <input type="text" id="colete" placeholder="Colete">
+
+        <label>Data inicial</label>
+        <input type="date" id="data-inicial">
+
+        <label>Data final</label>
+        <input type="date" id="data-final">
+
+        <button onclick="buscarHistorico()">
+            Buscar Histórico
+        </button>
+
+        <button onclick="window.location.href='dashboard.html'">
+            Voltar
+        </button>
+
+    </div>
+</div>
+
+<script type="module" src="js/historico.js"></script>
+
+</body>
+</html>
