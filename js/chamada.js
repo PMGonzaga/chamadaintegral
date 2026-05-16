@@ -14,7 +14,8 @@ let alunos = [];
 
 async function carregarAlunos() {
 
-    const colete = document.getElementById("colete").value;
+    const colete = document.getElementById("colete").value
+    .trim();
 
     const q = query(
         collection(db, "alunos"),
