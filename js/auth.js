@@ -10,11 +10,11 @@ import {
 
 async function login() {
 
+    mostrarLoading();
+
     const email = document.getElementById("email").value;
 
     const senha = document.getElementById("senha").value;
-
-    mostrarLoading();
 
     try {
 
@@ -37,11 +37,11 @@ esconderLoading();
 
 async function cadastrar() {
 
+    mostrarLoading();
+
     const email = document.getElementById("email").value;
 
     const senha = document.getElementById("senha").value;
-
-    mostrarLoading();
 
     try {
 
