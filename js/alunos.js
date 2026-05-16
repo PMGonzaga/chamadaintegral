@@ -1,17 +1,27 @@
+import {
+    db
+} from "./firebase.js";
+
+import {
+    collection,
+    addDoc,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 async function cadastrarAluno() {
 
     const nome = document.getElementById("nome").value;
+
     const turma = document.getElementById("turma").value;
+
     const colete = document.getElementById("colete").value;
 
-    await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            action: "cadastrarAluno",
-            nome,
-            turma,
-            colete
-        })
+    await addDoc(collection(db, "alunos"), {
+
+        nome,
+        turma,
+        colete,
+        criadoEm: new Date()
     });
 
     alert("Aluno cadastrado");
@@ -21,25 +31,22 @@ async function cadastrarAluno() {
 
 async function listarAlunos() {
 
-    const response = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({
-            action: "listarAlunos"
-        })
-    });
-
-    const alunos = await response.json();
+    const querySnapshot = await getDocs(
+        collection(db, "alunos")
+    );
 
     const lista = document.getElementById("lista-alunos");
 
     lista.innerHTML = "";
 
-    alunos.forEach(aluno => {
+    querySnapshot.forEach((doc) => {
+
+        const aluno = doc.data();
 
         lista.innerHTML += `
             <div class="aluno">
                 <span>
-                    ${aluno.nome} - ${aluno.turma} - Colete ${aluno.colete}
+                    ${aluno.nome} - ${aluno.colete}
                 </span>
             </div>
         `;
@@ -47,3 +54,5 @@ async function listarAlunos() {
 }
 
 listarAlunos();
+
+window.cadastrarAluno = cadastrarAluno;
