@@ -15,11 +15,22 @@ async function carregarAlunos() {
         }))}`
     });
 
-    alunos = await response.json();
+    const data = await response.json();
+
+    alunos = data;
 
     const lista = document.getElementById("lista-chamada");
 
     lista.innerHTML = "";
+
+    if(alunos.length === 0) {
+
+        lista.innerHTML = `
+            <p>Nenhum aluno encontrado.</p>
+        `;
+
+        return;
+    }
 
     alunos.forEach((aluno, index) => {
 
