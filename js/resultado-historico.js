@@ -4,9 +4,7 @@ import {
 
 import {
     collection,
-    getDocs,
-    query,
-    where
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function carregarHistorico() {
@@ -15,7 +13,7 @@ async function carregarHistorico() {
 
     const colete = localStorage.getItem(
         "historicoColete"
-    ).trim();
+    ).trim().toLowerCase();
 
     const dataInicialString = localStorage.getItem(
         "historicoDataInicial"
@@ -24,13 +22,6 @@ async function carregarHistorico() {
     const dataFinalString = localStorage.getItem(
         "historicoDataFinal"
     );
-
-    const q = query(
-        collection(db, "chamadas"),
-        where("colete", "==", colete)
-    );
-
-    const querySnapshot = await getDocs(q);
 
     const resultado = document.getElementById(
         "resultado"
@@ -52,11 +43,24 @@ async function carregarHistorico() {
         (1000 * 60 * 60 * 24)
     );
 
+    const querySnapshot = await getDocs(
+        collection(db, "chamadas")
+    );
+
     const faltasPorAluno = {};
 
     querySnapshot.forEach((doc) => {
 
         const chamada = doc.data();
+
+        const coleteFirebase =
+            chamada.colete
+            .trim()
+            .toLowerCase();
+
+        if(coleteFirebase !== colete) {
+            return;
+        }
 
         const dataChamada =
             chamada.data.toDate();
