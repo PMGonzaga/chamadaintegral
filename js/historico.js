@@ -5,17 +5,36 @@ function buscarHistorico() {
     const colete = document.getElementById("colete").value
     .trim();
 
-    const dataInicial = document.getElementById("data-inicial").value;
+    const dataInicial = document.getElementById(
+        "data-inicial"
+    ).value;
 
-    const dataFinal = document.getElementById("data-final").value;
+    let dataFinal = document.getElementById(
+        "data-final"
+    ).value;
 
-    localStorage.setItem("historicoColete", colete);
+    if(dataFinal === "") {
 
-    localStorage.setItem("historicoDataInicial", dataInicial);
+        dataFinal = dataInicial;
+    }
 
-    localStorage.setItem("historicoDataFinal", dataFinal);
+    localStorage.setItem(
+        "historicoColete",
+        colete
+    );
 
-    window.location.href = "resultado-historico.html";
+    localStorage.setItem(
+        "historicoDataInicial",
+        dataInicial
+    );
+
+    localStorage.setItem(
+        "historicoDataFinal",
+        dataFinal
+    );
+
+    window.location.href =
+        "resultado-historico.html";
 }
 
 window.buscarHistorico = buscarHistorico;
