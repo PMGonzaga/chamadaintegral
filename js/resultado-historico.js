@@ -9,22 +9,183 @@ import {
 
 async function carregarHistorico() {
 
-    alert("Script carregou");
+    mostrarLoading();
 
-    const querySnapshot = await getDocs(
-        collection(db, "chamadas")
-    );
+    try {
 
-    alert(
-        "Documentos encontrados: "
-        +
-        querySnapshot.size
-    );
+        const colete = localStorage.getItem(
+            "historicoColete"
+        ).trim().toLowerCase();
 
-    querySnapshot.forEach((doc) => {
+        const dataInicialString = localStorage.getItem(
+            "historicoDataInicial"
+        );
 
-        console.log(doc.data());
-    });
+        const dataFinalString = localStorage.getItem(
+            "historicoDataFinal"
+        );
+
+        const resultado = document.getElementById(
+            "resultado"
+        );
+
+        resultado.innerHTML = "";
+
+        const querySnapshot = await getDocs(
+            collection(db, "chamadas")
+        );
+
+        const faltasPorAluno = {};
+
+        querySnapshot.forEach((doc) => {
+
+            const chamada = doc.data();
+
+            const coleteFirebase =
+                chamada.colete
+                .trim()
+                .toLowerCase();
+
+            if(coleteFirebase !== colete) {
+                return;
+            }
+
+            let dataChamada;
+
+            if(
+                chamada.data
+                &&
+                typeof chamada.data.toDate === "function"
+            ) {
+
+                dataChamada =
+                    chamada.data.toDate();
+
+            } else {
+
+                dataChamada =
+                    new Date(chamada.data);
+            }
+
+            if(isNaN(dataChamada)) {
+                return;
+            }
+
+            const ano =
+                dataChamada.getFullYear();
+
+            const mes =
+                String(
+                    dataChamada.getMonth() + 1
+                ).padStart(2, "0");
+
+            const dia =
+                String(
+                    dataChamada.getDate()
+                ).padStart(2, "0");
+
+            const dataFormatada =
+                `${ano}-${mes}-${dia}`;
+
+            if(
+                dataFormatada >= dataInicialString
+                &&
+                dataFormatada <= dataFinalString
+            ) {
+
+                if(
+                    dataInicialString ===
+                    dataFinalString
+                ) {
+
+                    resultado.innerHTML += `
+                        <div class="aluno">
+
+                            <span>
+                                ${chamada.nome}
+                            </span>
+
+                            <span>
+                                ${chamada.status}
+                            </span>
+
+                        </div>
+                    `;
+
+                } else {
+
+                    if(
+                        !faltasPorAluno[
+                            chamada.nome
+                        ]
+                    ) {
+
+                        faltasPorAluno[
+                            chamada.nome
+                        ] = 0;
+                    }
+
+                    if(
+                        chamada.status ===
+                        "Falta"
+                    ) {
+
+                        faltasPorAluno[
+                            chamada.nome
+                        ]++;
+                    }
+                }
+            }
+        });
+
+        if(
+            dataInicialString !==
+            dataFinalString
+        ) {
+
+            for(
+                const nome
+                in
+                faltasPorAluno
+            ) {
+
+                resultado.innerHTML += `
+                    <div class="aluno">
+
+                        <span>
+                            ${nome}
+                        </span>
+
+                        <span>
+                            ${faltasPorAluno[nome]} faltas
+                        </span>
+
+                    </div>
+                `;
+            }
+        }
+
+        if(resultado.innerHTML === "") {
+
+            resultado.innerHTML = `
+                <div class="aluno">
+
+                    <span>
+                        Nenhum resultado encontrado
+                    </span>
+
+                </div>
+            `;
+        }
+
+    } catch(error) {
+
+        console.error(error);
+
+    } finally {
+
+        esconderLoading();
+    }
 }
 
 carregarHistorico();
