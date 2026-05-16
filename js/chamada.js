@@ -16,75 +16,87 @@ async function carregarAlunos() {
 
     mostrarLoading();
 
-    const colete = document.getElementById("colete").value
-    .trim();
+    try {
 
-    const q = query(
-        collection(db, "alunos"),
-        where("colete", "==", colete)
-    );
+        const colete = document.getElementById("colete").value
+        .trim();
 
-    const querySnapshot = await getDocs(q);
+        const q = query(
+            collection(db, "alunos"),
+            where("colete", "==", colete)
+        );
 
-    alunos = [];
+        const querySnapshot = await getDocs(q);
 
-    const lista = document.getElementById("lista-chamada");
+        alunos = [];
 
-    lista.innerHTML = "";
+        const lista = document.getElementById("lista-chamada");
 
-    querySnapshot.forEach((doc) => {
+        lista.innerHTML = "";
 
-        alunos.push(doc.data());
-    });
+        querySnapshot.forEach((doc) => {
 
-    alunos.forEach((aluno, index) => {
+            alunos.push(doc.data());
+        });
 
-        lista.innerHTML += `
-            <div class="aluno">
+        alunos.forEach((aluno, index) => {
 
-                <span>
-                    ${aluno.nome}
-                </span>
+            lista.innerHTML += `
+                <div class="aluno">
 
-                <select id="status-${index}">
-                    <option value="Presente">
-                        Presente
-                    </option>
+                    <span>
+                        ${aluno.nome}
+                    </span>
 
-                    <option value="Falta">
-                        Falta
-                    </option>
-                </select>
+                    <select id="status-${index}">
+                        <option value="Presente">
+                            Presente
+                        </option>
 
-            </div>
-        `;
+                        <option value="Falta">
+                            Falta
+                        </option>
+                    </select>
+
+                </div>
+            `;
+        });
+
+    } finally {
+
         esconderLoading();
-    });
+    }
 }
 
 async function salvarChamada() {
 
     mostrarLoading();
 
-    for(let index = 0; index < alunos.length; index++) {
+    try {
 
-        const aluno = alunos[index];
+        for(let index = 0; index < alunos.length; index++) {
 
-        await addDoc(collection(db, "chamadas"), {
+            const aluno = alunos[index];
 
-            nome: aluno.nome,
-            turma: aluno.turma,
-            colete: aluno.colete,
-            status: document.getElementById(
-                `status-${index}`
-            ).value,
+            await addDoc(collection(db, "chamadas"), {
 
-            data: new Date()
-        });
+                nome: aluno.nome,
+                turma: aluno.turma,
+                colete: aluno.colete,
+                status: document.getElementById(
+                    `status-${index}`
+                ).value,
+
+                data: new Date()
+            });
+        }
+
+        alert("Chamada salva com sucesso");
+
+    } finally {
+
+        esconderLoading();
     }
-
-    alert("Chamada salva com sucesso");
-    esconderLoading();
 }
 
 window.carregarAlunos = carregarAlunos;
