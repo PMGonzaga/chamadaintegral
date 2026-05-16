@@ -31,9 +31,9 @@ async function login() {
     } catch(error) {
 
         alert("Login inválido");
+        esconderLoading();
     }
 }
-esconderLoading();
 
 async function cadastrar() {
 
@@ -58,9 +58,9 @@ async function cadastrar() {
     } catch(error) {
 
         alert(error.message);
+        esconderLoading();
     }
 }
-esconderLoading();
 
 async function logout() {
 
@@ -71,8 +71,8 @@ async function logout() {
     localStorage.removeItem("logado");
 
     window.location.href = "index.html";
+    esconderLoading();
 }
-esconderLoading();
 
 window.login = login;
 
