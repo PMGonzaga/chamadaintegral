@@ -29,18 +29,15 @@ async function carregarHistorico() {
 
     resultado.innerHTML = "";
 
+    const pesquisaUnica =
+        dataInicialString === dataFinalString;
+
     const dataInicial = new Date(
         dataInicialString + "T00:00:00"
     );
 
     const dataFinal = new Date(
         dataFinalString + "T23:59:59"
-    );
-
-    const diferencaDias = Math.floor(
-        (dataFinal - dataInicial)
-        /
-        (1000 * 60 * 60 * 24)
     );
 
     const querySnapshot = await getDocs(
@@ -71,7 +68,7 @@ async function carregarHistorico() {
             dataChamada <= dataFinal
         ) {
 
-            if(diferencaDias === 0) {
+            if(pesquisaUnica) {
 
                 resultado.innerHTML += `
                     <div class="aluno">
@@ -102,7 +99,7 @@ async function carregarHistorico() {
         }
     });
 
-    if(diferencaDias >= 1) {
+    if(!pesquisaUnica) {
 
         for(const nome in faltasPorAluno) {
 
