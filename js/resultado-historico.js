@@ -13,15 +13,15 @@ async function carregarHistorico() {
 
     try {
 
-        const colete = localStorage.getItem(
+        const coletePesquisa = localStorage.getItem(
             "historicoColete"
         ).trim().toLowerCase();
 
-        const dataInicialString = localStorage.getItem(
+        const dataInicial = localStorage.getItem(
             "historicoDataInicial"
         );
 
-        const dataFinalString = localStorage.getItem(
+        const dataFinal = localStorage.getItem(
             "historicoDataFinal"
         );
 
@@ -46,11 +46,11 @@ async function carregarHistorico() {
                 .trim()
                 .toLowerCase();
 
-            if(coleteFirebase !== colete) {
+            if(coleteFirebase !== coletePesquisa) {
                 return;
             }
 
-            let dataChamada;
+            let dataObj;
 
             if(
                 chamada.data
@@ -58,45 +58,36 @@ async function carregarHistorico() {
                 typeof chamada.data.toDate === "function"
             ) {
 
-                dataChamada =
-                    chamada.data.toDate();
+                dataObj = chamada.data.toDate();
 
             } else {
 
-                dataChamada =
-                    new Date(chamada.data);
-            }
-
-            if(isNaN(dataChamada)) {
-                return;
+                dataObj = new Date(chamada.data);
             }
 
             const ano =
-                dataChamada.getFullYear();
+                dataObj.getFullYear();
 
             const mes =
                 String(
-                    dataChamada.getMonth() + 1
+                    dataObj.getMonth() + 1
                 ).padStart(2, "0");
 
             const dia =
                 String(
-                    dataChamada.getDate()
+                    dataObj.getDate()
                 ).padStart(2, "0");
 
-            const dataFormatada =
+            const dataRegistro =
                 `${ano}-${mes}-${dia}`;
 
             if(
-                dataFormatada >= dataInicialString
+                dataRegistro >= dataInicial
                 &&
-                dataFormatada <= dataFinalString
+                dataRegistro <= dataFinal
             ) {
 
-                if(
-                    dataInicialString ===
-                    dataFinalString
-                ) {
+                if(dataInicial === dataFinal) {
 
                     resultado.innerHTML += `
                         <div class="aluno">
@@ -126,8 +117,7 @@ async function carregarHistorico() {
                     }
 
                     if(
-                        chamada.status ===
-                        "Falta"
+                        chamada.status === "Falta"
                     ) {
 
                         faltasPorAluno[
@@ -138,10 +128,7 @@ async function carregarHistorico() {
             }
         });
 
-        if(
-            dataInicialString !==
-            dataFinalString
-        ) {
+        if(dataInicial !== dataFinal) {
 
             for(
                 const nome
