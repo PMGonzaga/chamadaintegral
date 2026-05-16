@@ -24,11 +24,11 @@ async function carregarHistorico() {
     );
 
     const dataInicial = new Date(
-        dataInicialString + "T00:00:00"
+        dataInicialString
     );
 
     const dataFinal = new Date(
-        dataFinalString + "T23:59:59"
+        dataFinalString
     );
 
     const q = query(
@@ -59,10 +59,13 @@ async function carregarHistorico() {
         const dataChamada =
             chamada.data.toDate();
 
+        const chamadaFormatada =
+            dataChamada.toISOString().split("T")[0];
+
         if(
-            dataChamada >= dataInicial
+            chamadaFormatada >= dataInicialString
             &&
-            dataChamada <= dataFinal
+            chamadaFormatada <= dataFinalString
         ) {
 
             if(diferencaDias === 0) {
