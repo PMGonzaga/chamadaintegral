@@ -14,6 +14,8 @@ async function login() {
 
     const senha = document.getElementById("senha").value;
 
+    mostrarLoading();
+
     try {
 
         await signInWithEmailAndPassword(
@@ -31,12 +33,15 @@ async function login() {
         alert("Login inválido");
     }
 }
+esconderLoading();
 
 async function cadastrar() {
 
     const email = document.getElementById("email").value;
 
     const senha = document.getElementById("senha").value;
+
+    mostrarLoading();
 
     try {
 
@@ -55,8 +60,11 @@ async function cadastrar() {
         alert(error.message);
     }
 }
+esconderLoading();
 
 async function logout() {
+
+    mostrarLoading();
 
     await signOut(auth);
 
@@ -64,6 +72,7 @@ async function logout() {
 
     window.location.href = "index.html";
 }
+esconderLoading();
 
 window.login = login;
 
