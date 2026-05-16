@@ -1,6 +1,7 @@
 function buscarHistorico() {
 
-    const colete = document.getElementById("colete").value;
+    const colete = document.getElementById("colete").value
+    .trim();
 
     const dataInicial = document.getElementById("data-inicial").value;
 
