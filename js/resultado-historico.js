@@ -15,23 +15,20 @@ async function carregarHistorico() {
         "historicoColete"
     );
 
+    const dataInicialString = localStorage.getItem(
+        "historicoDataInicial"
+    );
+
+    const dataFinalString = localStorage.getItem(
+        "historicoDataFinal"
+    );
+
     const dataInicial = new Date(
-        localStorage.getItem(
-            "historicoDataInicial"
-        )
+        dataInicialString + "T00:00:00"
     );
 
     const dataFinal = new Date(
-        localStorage.getItem(
-            "historicoDataFinal"
-        )
-    );
-
-    dataFinal.setHours(
-        23,
-        59,
-        59,
-        999
+        dataFinalString + "T23:59:59"
     );
 
     const q = query(
@@ -117,6 +114,19 @@ async function carregarHistorico() {
                 </div>
             `;
         }
+    }
+
+    if(resultado.innerHTML === "") {
+
+        resultado.innerHTML = `
+            <div class="aluno">
+
+                <span>
+                    Nenhum resultado encontrado
+                </span>
+
+            </div>
+        `;
     }
 }
 
