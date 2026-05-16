@@ -6,10 +6,13 @@ async function carregarAlunos() {
 
     const response = await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `data=${encodeURIComponent(JSON.stringify({
             action: "listarAlunosColete",
             colete
-        })
+        }))}`
     });
 
     alunos = await response.json();
@@ -51,10 +54,13 @@ async function salvarChamada() {
 
     await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `data=${encodeURIComponent(JSON.stringify({
             action: "salvarChamada",
             chamada
-        })
+        }))}`
     });
 
     alert("Chamada salva com sucesso");
