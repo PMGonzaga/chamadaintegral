@@ -13,7 +13,7 @@ async function carregarHistorico() {
 
     const colete = localStorage.getItem(
         "historicoColete"
-    );
+    ).trim().toLowerCase();
 
     const dataInicialString = localStorage.getItem(
         "historicoDataInicial"
@@ -55,6 +55,15 @@ async function carregarHistorico() {
     querySnapshot.forEach((doc) => {
 
         const chamada = doc.data();
+
+        const coleteSalvo =
+            chamada.colete
+            .trim()
+            .toLowerCase();
+
+        if(coleteSalvo !== colete) {
+            return;
+        }
 
         const dataChamada =
             chamada.data.toDate();
