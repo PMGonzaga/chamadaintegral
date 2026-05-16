@@ -12,51 +12,63 @@ async function cadastrarAluno() {
 
     mostrarLoading();
 
-    const nome = document.getElementById("nome").value;
+    try {
 
-    const turma = document.getElementById("turma").value;
+        const nome = document.getElementById("nome").value;
 
-    const colete = document.getElementById("colete").value;
+        const turma = document.getElementById("turma").value;
 
-    await addDoc(collection(db, "alunos"), {
+        const colete = document.getElementById("colete").value;
 
-        nome,
-        turma,
-        colete,
-        criadoEm: new Date()
-    });
+        await addDoc(collection(db, "alunos"), {
 
-    alert("Aluno cadastrado");
+            nome,
+            turma,
+            colete,
+            criadoEm: new Date()
+        });
 
-    listarAlunos();
-    esconderLoading();
+        alert("Aluno cadastrado");
+
+        listarAlunos();
+
+    } finally {
+
+        esconderLoading();
+    }
 }
 
 async function listarAlunos() {
 
     mostrarLoading();
 
-    const querySnapshot = await getDocs(
-        collection(db, "alunos")
-    );
+    try {
 
-    const lista = document.getElementById("lista-alunos");
+        const querySnapshot = await getDocs(
+            collection(db, "alunos")
+        );
 
-    lista.innerHTML = "";
+        const lista = document.getElementById("lista-alunos");
 
-    querySnapshot.forEach((doc) => {
+        lista.innerHTML = "";
 
-        const aluno = doc.data();
+        querySnapshot.forEach((doc) => {
 
-        lista.innerHTML += `
-            <div class="aluno">
-                <span>
-                    ${aluno.nome} - ${aluno.colete}
-                </span>
-            </div>
-        `;
+            const aluno = doc.data();
+
+            lista.innerHTML += `
+                <div class="aluno">
+                    <span>
+                        ${aluno.nome} - ${aluno.colete}
+                    </span>
+                </div>
+            `;
+        });
+
+    } finally {
+
         esconderLoading();
-    });
+    }
 }
 
 listarAlunos();
