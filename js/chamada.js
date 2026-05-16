@@ -14,6 +14,8 @@ let alunos = [];
 
 async function carregarAlunos() {
 
+    mostrarLoading();
+
     const colete = document.getElementById("colete").value
     .trim();
 
@@ -56,10 +58,13 @@ async function carregarAlunos() {
 
             </div>
         `;
+        esconderLoading();
     });
 }
 
 async function salvarChamada() {
+
+    mostrarLoading();
 
     for(let index = 0; index < alunos.length; index++) {
 
@@ -79,6 +84,7 @@ async function salvarChamada() {
     }
 
     alert("Chamada salva com sucesso");
+    esconderLoading();
 }
 
 window.carregarAlunos = carregarAlunos;
