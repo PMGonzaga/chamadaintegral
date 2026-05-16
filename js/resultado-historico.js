@@ -11,7 +11,10 @@ import {
 
 async function carregarHistorico() {
 
-    mostrarLoading();
+    if(window.mostrarLoading) {
+
+        window.mostrarLoading();
+    }
 
     const colete = localStorage.getItem(
         "historicoColete"
@@ -61,14 +64,21 @@ async function carregarHistorico() {
         const dataChamada =
             chamada.data.toDate();
 
+        const ano =
+            dataChamada.getFullYear();
+
+        const mes =
+            String(
+                dataChamada.getMonth() + 1
+            ).padStart(2, "0");
+
+        const dia =
+            String(
+                dataChamada.getDate()
+            ).padStart(2, "0");
+
         const chamadaFormatada =
-            new Date(
-                dataChamada.getTime()
-                -
-                (dataChamada.getTimezoneOffset() * 60000)
-            )
-            .toISOString()
-            .split("T")[0];
+            `${ano}-${mes}-${dia}`;
 
         if(
             chamadaFormatada >= dataInicialString
@@ -140,7 +150,10 @@ async function carregarHistorico() {
         `;
     }
 
-    esconderLoading();
+    if(window.esconderLoading) {
+
+        window.esconderLoading();
+    }
 }
 
 carregarHistorico();
