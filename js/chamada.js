@@ -93,9 +93,7 @@ async function salvarChamada() {
                 `status-${index}`
             ).value,
 
-            data: hoje,
-
-            dataFormatada
+            data: dataFormatada
         });
     }
 
