@@ -13,7 +13,7 @@ async function carregarHistorico() {
 
     const colete = localStorage.getItem(
         "historicoColete"
-    ).trim().toLowerCase();
+    ).trim();
 
     const dataInicialString = localStorage.getItem(
         "historicoDataInicial"
@@ -56,15 +56,6 @@ async function carregarHistorico() {
 
         const chamada = doc.data();
 
-        const coleteSalvo =
-            chamada.colete
-            .trim()
-            .toLowerCase();
-
-        if(coleteSalvo !== colete) {
-            return;
-        }
-
         const dataChamada =
             chamada.data.toDate();
 
@@ -105,7 +96,7 @@ async function carregarHistorico() {
         }
     });
 
-    if(diferencaDias > 1) {
+    if(diferencaDias >= 1) {
 
         for(const nome in faltasPorAluno) {
 
