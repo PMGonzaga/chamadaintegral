@@ -22,14 +22,25 @@
         <h1>Cadastrar Professor</h1>
 
         <input
+            type="text"
+            id="nome"
+            placeholder="Nome"
+            required
+        >
+
+        <input
             type="email"
             id="email"
-            placeholder="Email">
+            placeholder="Email"
+            required
+        >
 
         <input
             type="password"
             id="senha"
-            placeholder="Senha">
+            placeholder="Senha"
+            required
+        >
 
         <button onclick="cadastrar()">
             Cadastrar
@@ -51,7 +62,7 @@
 
 <script src="js/loading.js"></script>
 
-<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/auth.js?v=3"></script>
 
 </body>
 </html>
