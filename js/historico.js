@@ -9,13 +9,25 @@ function buscarHistorico() {
         "data-inicial"
     ).value;
 
-    let dataFinal = document.getElementById(
+    const dataFinal = document.getElementById(
         "data-final"
     ).value;
 
-    if(dataFinal === "") {
+    if(
+        !colete
+        ||
+        !dataInicial
+        ||
+        !dataFinal
+    ) {
 
-        dataFinal = dataInicial;
+        alert(
+            "Preencha todos os campos"
+        );
+
+        esconderLoading();
+
+        return;
     }
 
     localStorage.setItem(
