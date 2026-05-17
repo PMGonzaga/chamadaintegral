@@ -31,15 +31,9 @@ async function carregarAlunos() {
 
         alunos = [];
 
-        const lista = document.getElementById(
-            "lista-chamada"
-        );
-
         const listaColete = document.getElementById(
             "lista-alunos-colete"
         );
-
-        lista.innerHTML = "";
 
         listaColete.innerHTML = "";
 
@@ -50,14 +44,25 @@ async function carregarAlunos() {
 
         alunos.forEach((aluno, index) => {
 
-            lista.innerHTML += `
+            listaColete.innerHTML += `
                 <div class="aluno">
 
-                    <span>
-                        ${aluno.nome}
-                    </span>
+                    <div>
+
+                        <strong>
+                            ${aluno.nome}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            ${aluno.turma}
+                        </small>
+
+                    </div>
 
                     <select id="status-${index}">
+
                         <option value="Presente">
                             Presente
                         </option>
@@ -65,19 +70,8 @@ async function carregarAlunos() {
                         <option value="Falta">
                             Falta
                         </option>
+
                     </select>
-
-                </div>
-            `;
-
-            listaColete.innerHTML += `
-                <div class="aluno">
-
-                    <span>
-                        ${aluno.nome}
-                        -
-                        ${aluno.turma}
-                    </span>
 
                 </div>
             `;
@@ -127,8 +121,6 @@ async function salvarChamada() {
                 "Este colete já teve chamada realizada hoje."
             );
 
-            esconderLoading();
-
             return;
         }
 
@@ -159,7 +151,9 @@ async function salvarChamada() {
             );
         }
 
-        alert("Chamada salva com sucesso");
+        alert(
+            "Chamada salva com sucesso"
+        );
 
     } finally {
 
