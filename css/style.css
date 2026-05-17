@@ -119,3 +119,53 @@ button:active {
         transform: rotate(360deg);
     }
 }
+
+.acoes {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+.lista-card {
+
+    margin-top: 20px;
+}
+
+.aluno {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background: #f3f4f6;
+
+    margin-bottom: 10px;
+}
+
+.btn-deletar {
+
+    border: none;
+
+    background: #ef4444;
+
+    color: white;
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
