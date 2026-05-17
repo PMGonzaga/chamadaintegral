@@ -5,7 +5,9 @@ import {
 import {
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    deleteDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function cadastrarAluno() {
@@ -30,6 +32,38 @@ async function cadastrarAluno() {
 
         alert("Aluno cadastrado");
 
+        document.getElementById("nome").value = "";
+
+        document.getElementById("turma").value = "";
+
+        document.getElementById("colete").value = "";
+
+        listarAlunos();
+
+    } finally {
+
+        esconderLoading();
+    }
+}
+
+async function deletarAluno(id) {
+
+    const confirmar = confirm(
+        "Deseja realmente deletar este aluno?"
+    );
+
+    if(!confirmar) {
+        return;
+    }
+
+    mostrarLoading();
+
+    try {
+
+        await deleteDoc(
+            doc(db, "alunos", id)
+        );
+
         listarAlunos();
 
     } finally {
@@ -48,19 +82,34 @@ async function listarAlunos() {
             collection(db, "alunos")
         );
 
-        const lista = document.getElementById("lista-alunos");
+        const lista = document.getElementById(
+            "lista-alunos"
+        );
 
         lista.innerHTML = "";
 
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach((documento) => {
 
-            const aluno = doc.data();
+            const aluno = documento.data();
 
             lista.innerHTML += `
                 <div class="aluno">
+
                     <span>
-                        ${aluno.nome} - ${aluno.colete}
+                        ${aluno.nome}
+                        -
+                        ${aluno.turma}
+                        -
+                        Colete ${aluno.colete}
                     </span>
+
+                    <button
+                        class="btn-deletar"
+                        onclick="deletarAluno('${documento.id}')"
+                    >
+                        🗑
+                    </button>
+
                 </div>
             `;
         });
@@ -74,3 +123,5 @@ async function listarAlunos() {
 listarAlunos();
 
 window.cadastrarAluno = cadastrarAluno;
+
+window.deletarAluno = deletarAluno;
