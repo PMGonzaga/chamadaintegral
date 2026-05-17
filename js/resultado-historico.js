@@ -4,7 +4,9 @@ import {
 
 import {
     collection,
-    getDocs
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function carregarHistorico() {
@@ -13,9 +15,9 @@ async function carregarHistorico() {
 
     try {
 
-        const coletePesquisa = localStorage.getItem(
+        const colete = localStorage.getItem(
             "historicoColete"
-        ).trim().toLowerCase();
+        ).trim();
 
         const dataInicial = localStorage.getItem(
             "historicoDataInicial"
@@ -31,42 +33,46 @@ async function carregarHistorico() {
 
         resultado.innerHTML = "";
 
-        const querySnapshot = await getDocs(
-            collection(db, "chamadas")
+        const q = query(
+            collection(db, "chamadas"),
+            where("colete", "==", colete)
         );
 
+        const querySnapshot = await getDocs(q);
+
         const faltasPorAluno = {};
+
+        const pesquisaIndividual =
+            dataInicial === dataFinal;
 
         querySnapshot.forEach((doc) => {
 
             const chamada = doc.data();
 
-            const coleteFirebase =
-                chamada.colete
-                .trim()
-                .toLowerCase();
-
-            if(coleteFirebase !== coletePesquisa) {
-                return;
-            }
-
-            const dataRegistro =
-                chamada.data;
-
             if(
-                dataRegistro >= dataInicial
+                chamada.dataFormatada >= dataInicial
                 &&
-                dataRegistro <= dataFinal
+                chamada.dataFormatada <= dataFinal
             ) {
 
-                if(dataInicial === dataFinal) {
+                if(pesquisaIndividual) {
 
                     resultado.innerHTML += `
                         <div class="aluno">
 
-                            <span>
-                                ${chamada.nome}
-                            </span>
+                            <div>
+
+                                <strong>
+                                    ${chamada.nome}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    ${chamada.turma}
+                                </small>
+
+                            </div>
 
                             <span>
                                 ${chamada.status}
@@ -100,12 +106,10 @@ async function carregarHistorico() {
             }
         });
 
-        if(dataInicial !== dataFinal) {
+        if(!pesquisaIndividual) {
 
             for(
-                const nome
-                in
-                faltasPorAluno
+                const nome in faltasPorAluno
             ) {
 
                 resultado.innerHTML += `
@@ -136,10 +140,6 @@ async function carregarHistorico() {
                 </div>
             `;
         }
-
-    } catch(error) {
-
-        console.error(error);
 
     } finally {
 
