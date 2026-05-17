@@ -1,20 +1,38 @@
 import {
-    auth
+    auth,
+    db
 } from "./firebase.js";
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
+    sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function login() {
 
     mostrarLoading();
 
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value
+    .trim();
 
-    const senha = document.getElementById("senha").value;
+    const senha = document.getElementById("senha").value
+    .trim();
+
+    if(!email || !senha) {
+
+        alert("Preencha todos os campos");
+
+        esconderLoading();
+
+        return;
+    }
 
     try {
 
@@ -42,9 +60,23 @@ async function cadastrar() {
 
     mostrarLoading();
 
-    const email = document.getElementById("email").value;
+    const nome = document.getElementById("nome").value
+    .trim();
 
-    const senha = document.getElementById("senha").value;
+    const email = document.getElementById("email").value
+    .trim();
+
+    const senha = document.getElementById("senha").value
+    .trim();
+
+    if(!nome || !email || !senha) {
+
+        alert("Preencha todos os campos");
+
+        esconderLoading();
+
+        return;
+    }
 
     try {
 
@@ -54,6 +86,13 @@ async function cadastrar() {
             senha
         );
 
+        await addDoc(collection(db, "professores"), {
+
+            nome,
+            email,
+            criadoEm: new Date()
+        });
+
         alert("Conta criada com sucesso");
 
         window.location.href = "index.html";
@@ -61,6 +100,43 @@ async function cadastrar() {
     } catch(error) {
 
         alert(error.message);
+
+    } finally {
+
+        esconderLoading();
+    }
+}
+
+async function redefinirSenha() {
+
+    const email = document.getElementById("email").value
+    .trim();
+
+    if(!email) {
+
+        alert("Digite seu email");
+
+        return;
+    }
+
+    mostrarLoading();
+
+    try {
+
+        await sendPasswordResetEmail(
+            auth,
+            email
+        );
+
+        alert(
+            "Email de redefinição enviado"
+        );
+
+    } catch(error) {
+
+        alert(
+            "Erro ao enviar email"
+        );
 
     } finally {
 
@@ -91,3 +167,5 @@ window.login = login;
 window.cadastrar = cadastrar;
 
 window.logout = logout;
+
+window.redefinirSenha = redefinirSenha;
