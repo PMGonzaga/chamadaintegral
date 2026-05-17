@@ -9,28 +9,42 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container coluna">
+
     <div class="card">
 
         <h1>Lista de Chamada</h1>
 
         <input type="text" id="colete" placeholder="Colete">
 
-        <button onclick="carregarAlunos()">
-            Carregar Colete
-        </button>
+        <div class="acoes">
+
+            <button onclick="carregarAlunos()">
+                Carregar Colete
+            </button>
+
+            <button onclick="salvarChamada()">
+                Salvar Chamada
+            </button>
+
+            <button onclick="window.location.href='dashboard.html'">
+                Voltar
+            </button>
+
+        </div>
 
         <div id="lista-chamada"></div>
 
-        <button onclick="salvarChamada()">
-            Salvar Chamada
-        </button>
+    </div>
 
-        <button onclick="window.location.href='dashboard.html'">
-            Voltar
-        </button>
+    <div class="card lista-card">
+
+        <h2>Alunos do Colete</h2>
+
+        <div id="lista-alunos-colete"></div>
 
     </div>
+
 </div>
 
 <div class="loading-overlay" id="loading">
@@ -39,9 +53,9 @@
 
 </div>
 
-<script src="js/loading.js"></script>
+<script src="js/loading.js?v=3"></script>
 
-<script type="module" src="js/chamada.js"></script>
+<script type="module" src="js/chamada.js?v=3"></script>
 
 </body>
 </html>
