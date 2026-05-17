@@ -16,90 +16,155 @@ async function carregarAlunos() {
 
     mostrarLoading();
 
-    const colete = document.getElementById("colete").value
-    .trim();
+    try {
 
-    const q = query(
-        collection(db, "alunos"),
-        where("colete", "==", colete)
-    );
+        const colete = document.getElementById(
+            "colete"
+        ).value.trim();
 
-    const querySnapshot = await getDocs(q);
+        const q = query(
+            collection(db, "alunos"),
+            where("colete", "==", colete)
+        );
 
-    alunos = [];
+        const querySnapshot = await getDocs(q);
 
-    const lista = document.getElementById("lista-chamada");
+        alunos = [];
 
-    lista.innerHTML = "";
+        const lista = document.getElementById(
+            "lista-chamada"
+        );
 
-    querySnapshot.forEach((doc) => {
+        const listaColete = document.getElementById(
+            "lista-alunos-colete"
+        );
 
-        alunos.push(doc.data());
-    });
+        lista.innerHTML = "";
 
-    alunos.forEach((aluno, index) => {
+        listaColete.innerHTML = "";
 
-        lista.innerHTML += `
-            <div class="aluno">
+        querySnapshot.forEach((doc) => {
 
-                <span>
-                    ${aluno.nome}
-                </span>
+            alunos.push(doc.data());
+        });
 
-                <select id="status-${index}">
-                    <option value="Presente">
-                        Presente
-                    </option>
+        alunos.forEach((aluno, index) => {
 
-                    <option value="Falta">
-                        Falta
-                    </option>
-                </select>
+            lista.innerHTML += `
+                <div class="aluno">
 
-            </div>
-        `;
-    });
+                    <span>
+                        ${aluno.nome}
+                    </span>
 
-    esconderLoading();
+                    <select id="status-${index}">
+                        <option value="Presente">
+                            Presente
+                        </option>
+
+                        <option value="Falta">
+                            Falta
+                        </option>
+                    </select>
+
+                </div>
+            `;
+
+            listaColete.innerHTML += `
+                <div class="aluno">
+
+                    <span>
+                        ${aluno.nome}
+                        -
+                        ${aluno.turma}
+                    </span>
+
+                </div>
+            `;
+        });
+
+    } finally {
+
+        esconderLoading();
+    }
 }
 
 async function salvarChamada() {
 
     mostrarLoading();
 
-    const hoje = new Date();
+    try {
 
-    const dataFormatada =
-        hoje.getFullYear()
-        + "-"
-        + String(
-            hoje.getMonth() + 1
-        ).padStart(2, "0")
-        + "-"
-        + String(
-            hoje.getDate()
-        ).padStart(2, "0");
+        const hoje = new Date();
 
-    for(let index = 0; index < alunos.length; index++) {
+        const dataFormatada =
+            hoje.getFullYear()
+            + "-"
+            + String(
+                hoje.getMonth() + 1
+            ).padStart(2, "0")
+            + "-"
+            + String(
+                hoje.getDate()
+            ).padStart(2, "0");
 
-        const aluno = alunos[index];
+        const colete = document.getElementById(
+            "colete"
+        ).value.trim();
 
-        await addDoc(collection(db, "chamadas"), {
+        const verificarQuery = query(
+            collection(db, "chamadas"),
+            where("colete", "==", colete),
+            where("dataFormatada", "==", dataFormatada)
+        );
 
-            nome: aluno.nome,
-            turma: aluno.turma,
-            colete: aluno.colete,
-            status: document.getElementById(
-                `status-${index}`
-            ).value,
+        const chamadaExistente =
+            await getDocs(verificarQuery);
 
-            data: dataFormatada
-        });
+        if(!chamadaExistente.empty) {
+
+            alert(
+                "Este colete já teve chamada realizada hoje."
+            );
+
+            esconderLoading();
+
+            return;
+        }
+
+        for(
+            let index = 0;
+            index < alunos.length;
+            index++
+        ) {
+
+            const aluno = alunos[index];
+
+            await addDoc(
+                collection(db, "chamadas"),
+                {
+
+                    nome: aluno.nome,
+
+                    turma: aluno.turma,
+
+                    colete: aluno.colete,
+
+                    status: document.getElementById(
+                        `status-${index}`
+                    ).value,
+
+                    dataFormatada
+                }
+            );
+        }
+
+        alert("Chamada salva com sucesso");
+
+    } finally {
+
+        esconderLoading();
     }
-
-    alert("Chamada salva com sucesso");
-
-    esconderLoading();
 }
 
 window.carregarAlunos = carregarAlunos;
