@@ -16,11 +16,21 @@ async function cadastrarAluno() {
 
     try {
 
-        const nome = document.getElementById("nome").value;
+        const nome = document.getElementById("nome").value
+        .trim();
 
-        const turma = document.getElementById("turma").value;
+        const turma = document.getElementById("turma").value
+        .trim();
 
-        const colete = document.getElementById("colete").value;
+        const colete = document.getElementById("colete").value
+        .trim();
+
+        if(!nome || !turma || !colete) {
+
+            alert("Preencha todos os campos");
+
+            return;
+        }
 
         await addDoc(collection(db, "alunos"), {
 
