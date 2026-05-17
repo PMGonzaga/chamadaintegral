@@ -188,3 +188,12 @@ button:active {
 
     justify-content: center;
 }
+
+.container.coluna {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+}
