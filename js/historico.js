@@ -2,8 +2,9 @@ function buscarHistorico() {
 
     mostrarLoading();
 
-    const colete = document.getElementById("colete").value
-    .trim();
+    const colete = document.getElementById(
+        "colete"
+    ).value.trim();
 
     const dataInicial = document.getElementById(
         "data-inicial"
@@ -14,11 +15,11 @@ function buscarHistorico() {
     ).value;
 
     if(
-        !colete
+        colete === ""
         ||
-        !dataInicial
+        dataInicial === ""
         ||
-        !dataFinal
+        dataFinal === ""
     ) {
 
         alert(
