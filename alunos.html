@@ -10,25 +10,39 @@
 <body>
 
 <div class="container">
+
     <div class="card">
 
         <h1>Cadastro de Alunos</h1>
 
         <input type="text" id="nome" placeholder="Nome do aluno">
+
         <input type="text" id="turma" placeholder="Turma">
+
         <input type="text" id="colete" placeholder="Colete">
 
-        <button onclick="cadastrarAluno()">
-            Cadastrar
-        </button>
+        <div class="acoes">
 
-        <button onclick="window.location.href='dashboard.html'">
-            Voltar
-        </button>
+            <button onclick="cadastrarAluno()">
+                Cadastrar
+            </button>
+
+            <button onclick="window.location.href='dashboard.html'">
+                Voltar
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card lista-card">
+
+        <h2>Lista de Alunos</h2>
 
         <div id="lista-alunos"></div>
 
     </div>
+
 </div>
 
 <div class="loading-overlay" id="loading">
@@ -37,9 +51,9 @@
 
 </div>
 
-<script src="js/loading.js"></script>
+<script src="js/loading.js?v=2"></script>
 
-<script type="module" src="js/alunos.js"></script>
+<script type="module" src="js/alunos.js?v=2"></script>
 
 </body>
 </html>
