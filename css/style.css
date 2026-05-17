@@ -243,3 +243,28 @@ button:active {
         transform: rotate(360deg);
     }
 }
+
+.aluno select {
+
+    width: 120px;
+
+    min-width: 120px;
+
+    padding: 8px;
+
+    font-size: 14px;
+
+    margin-top: 0;
+}
+
+.aluno strong {
+
+    font-size: 15px;
+}
+
+.aluno small {
+
+    color: #666;
+
+    font-size: 12px;
+}
