@@ -124,14 +124,27 @@ button:active {
 
     display: flex;
 
-    gap: 10px;
+    gap: 8px;
 
-    margin-bottom: 20px;
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+}
+
+.acoes button {
+
+    padding: 8px 14px;
+
+    font-size: 14px;
+
+    width: auto;
 }
 
 .lista-card {
 
     margin-top: 20px;
+
+    width: 100%;
 }
 
 .aluno {
@@ -159,13 +172,19 @@ button:active {
 
     color: white;
 
-    width: 35px;
+    width: 32px;
 
-    height: 35px;
+    height: 32px;
 
     border-radius: 8px;
 
     cursor: pointer;
 
-    font-size: 18px;
+    font-size: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 }
