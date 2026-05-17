@@ -5,7 +5,10 @@ import {
 
 import {
     collection,
-    addDoc
+    addDoc,
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -41,6 +44,48 @@ async function login() {
             email,
             senha
         );
+
+        const q = query(
+            collection(db, "professores"),
+            where("email", "==", email)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if(querySnapshot.empty) {
+
+            await signOut(auth);
+
+            alert(
+                "Professor não encontrado"
+            );
+
+            esconderLoading();
+
+            return;
+        }
+
+        let aprovado = false;
+
+        querySnapshot.forEach((doc) => {
+
+            const professor = doc.data();
+
+            aprovado = professor.aprovado;
+        });
+
+        if(!aprovado) {
+
+            await signOut(auth);
+
+            alert(
+                "Sua conta ainda não foi aprovada"
+            );
+
+            esconderLoading();
+
+            return;
+        }
 
         localStorage.setItem("logado", "true");
 
@@ -90,10 +135,17 @@ async function cadastrar() {
 
             nome,
             email,
+
+            aprovado: false,
+
             criadoEm: new Date()
         });
 
-        alert("Conta criada com sucesso");
+        alert(
+            "Conta criada com sucesso. Aguarde aprovação."
+        );
+
+        await signOut(auth);
 
         window.location.href = "index.html";
 
