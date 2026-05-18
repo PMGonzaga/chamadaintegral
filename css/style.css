@@ -304,7 +304,7 @@ button:active {
     flex-shrink: 0;
 }
 
-.botoes-colete {
+.coletes-botoes {
 
     display: flex;
 
@@ -312,30 +312,30 @@ button:active {
 
     align-items: center;
 
-    gap: 8px;
+    gap: 6px;
 
-    margin-top: 15px;
+    margin-top: 12px;
 
-    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
-.botoes-colete button {
+.coletes-botoes .btn-colete {
 
-    width: 90px;
+    width: 75px;
 
-    min-width: 90px;
+    min-width: 75px;
 
-    max-width: 90px;
+    max-width: 75px;
 
-    padding: 8px 10px;
+    padding: 6px 8px;
 
-    font-size: 13px;
+    margin-top: 0;
+
+    font-size: 12px;
 
     font-weight: bold;
 
     color: white;
-
-    margin-top: 0;
 
     flex: none;
 }
@@ -363,7 +363,7 @@ button:active {
 
     border: 2px solid #111827;
 
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 .secao-colete {
