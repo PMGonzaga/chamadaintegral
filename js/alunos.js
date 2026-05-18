@@ -60,7 +60,9 @@ async function cadastrarAluno() {
 
         if(!nome || !turma || !colete) {
 
-            alert("Preencha todos os campos");
+            alert(
+                "Preencha todos os campos e selecione um colete"
+            );
 
             return;
         }
@@ -250,6 +252,10 @@ async function listarAlunos() {
             );
         });
 
+        let quantidadeAmarelo = 0;
+        let quantidadeAzul = 0;
+        let quantidadeVerde = 0;
+
         alunos.forEach((aluno) => {
 
             const htmlAluno = `
@@ -289,19 +295,37 @@ async function listarAlunos() {
 
             if(aluno.colete === "Amarelo") {
 
+                quantidadeAmarelo++;
+
                 listaAmarelo.innerHTML += htmlAluno;
             }
 
             if(aluno.colete === "Azul") {
+
+                quantidadeAzul++;
 
                 listaAzul.innerHTML += htmlAluno;
             }
 
             if(aluno.colete === "Verde") {
 
+                quantidadeVerde++;
+
                 listaVerde.innerHTML += htmlAluno;
             }
         });
+
+        document.getElementById("titulo-amarelo")
+        .innerText =
+            `Lista do Colete Amarelo (${quantidadeAmarelo})`;
+
+        document.getElementById("titulo-azul")
+        .innerText =
+            `Lista do Colete Azul (${quantidadeAzul})`;
+
+        document.getElementById("titulo-verde")
+        .innerText =
+            `Lista do Colete Verde (${quantidadeVerde})`;
 
     } finally {
 
