@@ -268,3 +268,28 @@ button:active {
 
     font-size: 12px;
 }
+
+.btn-editar {
+
+    border: none;
+
+    background: #f59e0b;
+
+    color: white;
+
+    width: 32px;
+
+    height: 32px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
