@@ -42,6 +42,17 @@ async function carregarAlunos() {
             alunos.push(doc.data());
         });
 
+        alunos.sort((a, b) => {
+
+            return a.nome.localeCompare(
+                b.nome,
+                "pt-BR",
+                {
+                    sensitivity: "base"
+                }
+            );
+        });
+
         alunos.forEach((aluno, index) => {
 
             listaColete.innerHTML += `
