@@ -16,8 +16,7 @@ async function carregarHistorico() {
         const colete = localStorage.getItem(
             "historicoColete"
         )
-        .trim()
-        .toLowerCase();
+        .trim();
 
         const dataInicial = localStorage.getItem(
             "historicoDataInicial"
@@ -26,6 +25,13 @@ async function carregarHistorico() {
         const dataFinal = localStorage.getItem(
             "historicoDataFinal"
         );
+
+        const titulo = document.getElementById(
+            "titulo-resultado"
+        );
+
+        titulo.innerHTML =
+            `Resultado Colete ${colete} - ${dataInicial}`;
 
         const resultado = document.getElementById(
             "resultado"
@@ -48,8 +54,7 @@ async function carregarHistorico() {
 
             const coleteSalvo =
                 chamada.colete
-                .trim()
-                .toLowerCase();
+                .trim();
 
             if(coleteSalvo !== colete) {
                 return;
