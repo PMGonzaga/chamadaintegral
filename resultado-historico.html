@@ -18,9 +18,28 @@
 
         <div id="resultado"></div>
 
-        <button onclick="window.location.href='historico.html'">
-            Voltar
-        </button>
+        <div class="acoes">
+
+            <button
+                id="btn-editar-chamada"
+                onclick="ativarEdicao()"
+            >
+                Editar Chamada
+            </button>
+
+            <button
+                id="btn-salvar-chamada"
+                onclick="salvarEdicao()"
+                style="display: none;"
+            >
+                Salvar Chamada
+            </button>
+
+            <button onclick="window.location.href='historico.html'">
+                Voltar
+            </button>
+
+        </div>
 
     </div>
 </div>
