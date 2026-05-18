@@ -12,6 +12,38 @@ import {
 
 let alunos = [];
 
+function selecionarColete(colete) {
+
+    document.getElementById("colete").value =
+        colete;
+
+    document.querySelectorAll(".btn-colete")
+    .forEach((botao) => {
+
+        botao.classList.remove(
+            "colete-selecionado"
+        );
+    });
+
+    if(colete === "Amarelo") {
+
+        document.querySelector(".btn-amarelo")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Azul") {
+
+        document.querySelector(".btn-azul")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Verde") {
+
+        document.querySelector(".btn-verde")
+        .classList.add("colete-selecionado");
+    }
+}
+
 async function carregarAlunos() {
 
     mostrarLoading();
@@ -21,6 +53,20 @@ async function carregarAlunos() {
         const colete = document.getElementById(
             "colete"
         ).value.trim();
+
+        if(!colete) {
+
+            alert(
+                "Selecione um colete"
+            );
+
+            return;
+        }
+
+        document.getElementById(
+            "titulo-colete"
+        ).innerHTML =
+            `Alunos do Colete ${colete}`;
 
         const q = query(
             collection(db, "alunos"),
@@ -88,6 +134,19 @@ async function carregarAlunos() {
             `;
         });
 
+        if(alunos.length === 0) {
+
+            listaColete.innerHTML = `
+                <div class="aluno">
+
+                    <span>
+                        Nenhum aluno encontrado
+                    </span>
+
+                </div>
+            `;
+        }
+
     } finally {
 
         esconderLoading();
@@ -116,6 +175,15 @@ async function salvarChamada() {
         const colete = document.getElementById(
             "colete"
         ).value.trim();
+
+        if(!colete) {
+
+            alert(
+                "Selecione um colete"
+            );
+
+            return;
+        }
 
         const verificarQuery = query(
             collection(db, "chamadas"),
@@ -175,3 +243,5 @@ async function salvarChamada() {
 window.carregarAlunos = carregarAlunos;
 
 window.salvarChamada = salvarChamada;
+
+window.selecionarColete = selecionarColete;
