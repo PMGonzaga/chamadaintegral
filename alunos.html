@@ -29,10 +29,37 @@
             required
         >
 
+        <div class="coletes-botoes">
+
+            <button
+                class="btn-colete btn-amarelo"
+                onclick="selecionarColete('Amarelo')"
+                type="button"
+            >
+                Amarelo
+            </button>
+
+            <button
+                class="btn-colete btn-azul"
+                onclick="selecionarColete('Azul')"
+                type="button"
+            >
+                Azul
+            </button>
+
+            <button
+                class="btn-colete btn-verde"
+                onclick="selecionarColete('Verde')"
+                type="button"
+            >
+                Verde
+            </button>
+
+        </div>
+
         <input
-            type="text"
+            type="hidden"
             id="colete"
-            placeholder="Colete"
             required
         >
 
@@ -52,9 +79,25 @@
 
     <div class="card lista-card">
 
-        <h2>Lista de Alunos</h2>
+        <h2>Lista do Colete Amarelo</h2>
 
-        <div id="lista-alunos"></div>
+        <div id="lista-amarelo"></div>
+
+    </div>
+
+    <div class="card lista-card">
+
+        <h2>Lista do Colete Azul</h2>
+
+        <div id="lista-azul"></div>
+
+    </div>
+
+    <div class="card lista-card">
+
+        <h2>Lista do Colete Verde</h2>
+
+        <div id="lista-verde"></div>
 
     </div>
 
