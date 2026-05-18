@@ -405,3 +405,20 @@ button:active {
 
     align-items: center;
 }
+
+.status-chamada {
+
+    font-weight: bold;
+
+    color: #111827;
+}
+
+#btn-salvar-chamada {
+
+    background: #16a34a;
+}
+
+#btn-editar-chamada {
+
+    background: #f59e0b;
+}
