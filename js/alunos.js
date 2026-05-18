@@ -11,6 +11,38 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+function selecionarColete(colete) {
+
+    document.getElementById("colete").value =
+        colete;
+
+    document.querySelectorAll(".btn-colete")
+    .forEach((botao) => {
+
+        botao.classList.remove(
+            "colete-selecionado"
+        );
+    });
+
+    if(colete === "Amarelo") {
+
+        document.querySelector(".btn-amarelo")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Azul") {
+
+        document.querySelector(".btn-azul")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Verde") {
+
+        document.querySelector(".btn-verde")
+        .classList.add("colete-selecionado");
+    }
+}
+
 async function cadastrarAluno() {
 
     mostrarLoading();
@@ -73,6 +105,14 @@ async function cadastrarAluno() {
         document.getElementById("turma").value = "";
 
         document.getElementById("colete").value = "";
+
+        document.querySelectorAll(".btn-colete")
+        .forEach((botao) => {
+
+            botao.classList.remove(
+                "colete-selecionado"
+            );
+        });
 
         listarAlunos();
 
@@ -171,11 +211,23 @@ async function listarAlunos() {
             collection(db, "alunos")
         );
 
-        const lista = document.getElementById(
-            "lista-alunos"
+        const listaAmarelo = document.getElementById(
+            "lista-amarelo"
         );
 
-        lista.innerHTML = "";
+        const listaAzul = document.getElementById(
+            "lista-azul"
+        );
+
+        const listaVerde = document.getElementById(
+            "lista-verde"
+        );
+
+        listaAmarelo.innerHTML = "";
+
+        listaAzul.innerHTML = "";
+
+        listaVerde.innerHTML = "";
 
         const alunos = [];
 
@@ -189,20 +241,6 @@ async function listarAlunos() {
 
         alunos.sort((a, b) => {
 
-            const coleteComparacao =
-                a.colete.localeCompare(
-                    b.colete,
-                    "pt-BR",
-                    {
-                        sensitivity: "base"
-                    }
-                );
-
-            if(coleteComparacao !== 0) {
-
-                return coleteComparacao;
-            }
-
             return a.nome.localeCompare(
                 b.nome,
                 "pt-BR",
@@ -214,15 +252,13 @@ async function listarAlunos() {
 
         alunos.forEach((aluno) => {
 
-            lista.innerHTML += `
+            const htmlAluno = `
                 <div class="aluno">
 
                     <span>
                         ${aluno.nome}
                         -
                         ${aluno.turma}
-                        -
-                        Colete ${aluno.colete}
                     </span>
 
                     <div class="acoes">
@@ -250,6 +286,21 @@ async function listarAlunos() {
 
                 </div>
             `;
+
+            if(aluno.colete === "Amarelo") {
+
+                listaAmarelo.innerHTML += htmlAluno;
+            }
+
+            if(aluno.colete === "Azul") {
+
+                listaAzul.innerHTML += htmlAluno;
+            }
+
+            if(aluno.colete === "Verde") {
+
+                listaVerde.innerHTML += htmlAluno;
+            }
         });
 
     } finally {
@@ -265,3 +316,5 @@ window.cadastrarAluno = cadastrarAluno;
 window.deletarAluno = deletarAluno;
 
 window.editarAluno = editarAluno;
+
+window.selecionarColete = selecionarColete;
