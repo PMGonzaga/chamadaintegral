@@ -7,7 +7,8 @@ import {
     addDoc,
     getDocs,
     deleteDoc,
-    doc
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 async function cadastrarAluno() {
@@ -32,6 +33,31 @@ async function cadastrarAluno() {
             return;
         }
 
+        const querySnapshot = await getDocs(
+            collection(db, "alunos")
+        );
+
+        let alunoExiste = false;
+
+        querySnapshot.forEach((documento) => {
+
+            const aluno = documento.data();
+
+            if(
+                aluno.nome.toLowerCase() === nome.toLowerCase()
+            ) {
+
+                alunoExiste = true;
+            }
+        });
+
+        if(alunoExiste) {
+
+            alert("Este aluno já está cadastrado");
+
+            return;
+        }
+
         await addDoc(collection(db, "alunos"), {
 
             nome,
@@ -47,6 +73,59 @@ async function cadastrarAluno() {
         document.getElementById("turma").value = "";
 
         document.getElementById("colete").value = "";
+
+        listarAlunos();
+
+    } finally {
+
+        esconderLoading();
+    }
+}
+
+async function editarAluno(id, nomeAtual, turmaAtual, coleteAtual) {
+
+    const novoNome = prompt(
+        "Editar nome:",
+        nomeAtual
+    );
+
+    if(!novoNome) {
+        return;
+    }
+
+    const novaTurma = prompt(
+        "Editar turma:",
+        turmaAtual
+    );
+
+    if(!novaTurma) {
+        return;
+    }
+
+    const novoColete = prompt(
+        "Editar colete:",
+        coleteAtual
+    );
+
+    if(!novoColete) {
+        return;
+    }
+
+    mostrarLoading();
+
+    try {
+
+        await updateDoc(
+            doc(db, "alunos", id),
+            {
+
+                nome: novoNome.trim(),
+                turma: novaTurma.trim(),
+                colete: novoColete.trim()
+            }
+        );
+
+        alert("Aluno atualizado");
 
         listarAlunos();
 
@@ -98,9 +177,42 @@ async function listarAlunos() {
 
         lista.innerHTML = "";
 
+        const alunos = [];
+
         querySnapshot.forEach((documento) => {
 
-            const aluno = documento.data();
+            alunos.push({
+                id: documento.id,
+                ...documento.data()
+            });
+        });
+
+        alunos.sort((a, b) => {
+
+            const coleteComparacao =
+                a.colete.localeCompare(
+                    b.colete,
+                    "pt-BR",
+                    {
+                        sensitivity: "base"
+                    }
+                );
+
+            if(coleteComparacao !== 0) {
+
+                return coleteComparacao;
+            }
+
+            return a.nome.localeCompare(
+                b.nome,
+                "pt-BR",
+                {
+                    sensitivity: "base"
+                }
+            );
+        });
+
+        alunos.forEach((aluno) => {
 
             lista.innerHTML += `
                 <div class="aluno">
@@ -113,12 +225,28 @@ async function listarAlunos() {
                         Colete ${aluno.colete}
                     </span>
 
-                    <button
-                        class="btn-deletar"
-                        onclick="deletarAluno('${documento.id}')"
-                    >
-                        🗑
-                    </button>
+                    <div class="acoes">
+
+                        <button
+                            class="btn-editar"
+                            onclick="editarAluno(
+                                '${aluno.id}',
+                                '${aluno.nome}',
+                                '${aluno.turma}',
+                                '${aluno.colete}'
+                            )"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            class="btn-deletar"
+                            onclick="deletarAluno('${aluno.id}')"
+                        >
+                            🗑
+                        </button>
+
+                    </div>
 
                 </div>
             `;
@@ -135,3 +263,5 @@ listarAlunos();
 window.cadastrarAluno = cadastrarAluno;
 
 window.deletarAluno = deletarAluno;
+
+window.editarAluno = editarAluno;
