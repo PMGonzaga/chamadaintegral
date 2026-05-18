@@ -1,3 +1,35 @@
+function selecionarColete(colete) {
+
+    document.getElementById("colete").value =
+        colete;
+
+    document.querySelectorAll(".btn-colete")
+    .forEach((botao) => {
+
+        botao.classList.remove(
+            "colete-selecionado"
+        );
+    });
+
+    if(colete === "Amarelo") {
+
+        document.querySelector(".btn-amarelo")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Azul") {
+
+        document.querySelector(".btn-azul")
+        .classList.add("colete-selecionado");
+    }
+
+    if(colete === "Verde") {
+
+        document.querySelector(".btn-verde")
+        .classList.add("colete-selecionado");
+    }
+}
+
 function buscarHistorico() {
 
     mostrarLoading();
@@ -51,3 +83,5 @@ function buscarHistorico() {
 }
 
 window.buscarHistorico = buscarHistorico;
+
+window.selecionarColete = selecionarColete;
