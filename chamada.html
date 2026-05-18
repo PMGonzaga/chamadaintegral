@@ -15,7 +15,38 @@
 
         <h1>Lista de Chamada</h1>
 
-        <input type="text" id="colete" placeholder="Colete">
+        <div class="coletes-botoes">
+
+            <button
+                class="btn-colete btn-amarelo"
+                onclick="selecionarColete('Amarelo')"
+                type="button"
+            >
+                Amarelo
+            </button>
+
+            <button
+                class="btn-colete btn-azul"
+                onclick="selecionarColete('Azul')"
+                type="button"
+            >
+                Azul
+            </button>
+
+            <button
+                class="btn-colete btn-verde"
+                onclick="selecionarColete('Verde')"
+                type="button"
+            >
+                Verde
+            </button>
+
+        </div>
+
+        <input
+            type="hidden"
+            id="colete"
+        >
 
         <div class="acoes">
 
@@ -37,7 +68,9 @@
 
     <div class="card lista-card">
 
-        <h2>Alunos do Colete</h2>
+        <h2 id="titulo-colete">
+            Alunos do Colete
+        </h2>
 
         <div id="lista-alunos-colete"></div>
 
