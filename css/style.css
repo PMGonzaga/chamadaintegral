@@ -403,3 +403,67 @@ button:active {
 
     align-items: center;
 }
+
+.coletes-botoes {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 12px;
+
+    margin-bottom: 12px;
+
+    flex-direction: row;
+}
+
+.coletes-botoes .btn-colete {
+
+    width: 75px;
+
+    min-width: 75px;
+
+    max-width: 75px;
+
+    padding: 6px 8px;
+
+    margin-top: 0;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    color: white;
+
+    flex: none;
+}
+
+.btn-amarelo {
+
+    background: #eab308;
+}
+
+.btn-azul {
+
+    background: #2563eb;
+}
+
+.btn-verde {
+
+    background: #16a34a;
+}
+
+.btn-colete.colete-selecionado {
+
+    color: red;
+
+    filter: brightness(0.7);
+
+    border: 2px solid #111827;
+
+    transform: scale(0.95);
+}
