@@ -67,11 +67,15 @@ async function login() {
 
         let aprovado = false;
 
+        let nomeProfessor = "";
+
         querySnapshot.forEach((doc) => {
 
             const professor = doc.data();
 
             aprovado = professor.aprovado;
+
+            nomeProfessor = professor.nome;
         });
 
         if(!aprovado) {
@@ -87,7 +91,15 @@ async function login() {
             return;
         }
 
-        localStorage.setItem("logado", "true");
+        localStorage.setItem(
+            "logado",
+            "true"
+        );
+
+        localStorage.setItem(
+            "nomeProfessor",
+            nomeProfessor
+        );
 
         window.location.href = "dashboard.html";
 
@@ -205,6 +217,8 @@ async function logout() {
         await signOut(auth);
 
         localStorage.removeItem("logado");
+
+        localStorage.removeItem("nomeProfessor");
 
         window.location.href = "index.html";
 
