@@ -1,22 +1,18 @@
-const tituloDashboard = document.getElementById(
+const titulo = document.getElementById(
     "titulo-dashboard"
 );
 
-const usuarioLogado = JSON.parse(
-    localStorage.getItem("usuarioLogado")
+const nomeProfessor = localStorage.getItem(
+    "nomeProfessor"
 );
 
-if(
-    usuarioLogado
-    &&
-    usuarioLogado.nome
-) {
+if(nomeProfessor) {
 
-    tituloDashboard.innerText =
-        `Olá ${usuarioLogado.nome}`;
+    titulo.innerText =
+        `Olá ${nomeProfessor}`;
 
 } else {
 
-    tituloDashboard.innerText =
+    titulo.innerText =
         "Olá Professor";
 }
