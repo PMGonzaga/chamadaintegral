@@ -213,6 +213,10 @@ async function listarAlunos() {
             collection(db, "alunos")
         );
 
+        const chamadasSnapshot = await getDocs(
+            collection(db, "chamadas")
+        );
+
         const listaAmarelo = document.getElementById(
             "lista-amarelo"
         );
@@ -241,6 +245,42 @@ async function listarAlunos() {
             });
         });
 
+        const mesAtual =
+            new Date().getMonth();
+
+        const anoAtual =
+            new Date().getFullYear();
+
+        const alunosComPresenca = [];
+
+        chamadasSnapshot.forEach((documento) => {
+
+            const chamada = documento.data();
+
+            const data = new Date(
+                chamada.dataFormatada
+            );
+
+            const mesChamada =
+                data.getMonth();
+
+            const anoChamada =
+                data.getFullYear();
+
+            if(
+                chamada.status === "Presente"
+                &&
+                mesChamada === mesAtual
+                &&
+                anoChamada === anoAtual
+            ) {
+
+                alunosComPresenca.push(
+                    chamada.nome.toLowerCase()
+                );
+            }
+        });
+
         alunos.sort((a, b) => {
 
             return a.nome.localeCompare(
@@ -258,8 +298,18 @@ async function listarAlunos() {
 
         alunos.forEach((aluno) => {
 
+            const semPresenca =
+                !alunosComPresenca.includes(
+                    aluno.nome.toLowerCase()
+                );
+
+            const classeSemPresenca =
+                semPresenca
+                ? "aluno-sem-presenca"
+                : "";
+
             const htmlAluno = `
-                <div class="aluno">
+                <div class="aluno ${classeSemPresenca}">
 
                     <span>
                         ${aluno.nome}
