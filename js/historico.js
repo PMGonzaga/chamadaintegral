@@ -28,6 +28,12 @@ function selecionarColete(colete) {
         document.querySelector(".btn-verde")
         .classList.add("colete-selecionado");
     }
+
+    if(colete === "Todos") {
+
+        document.querySelector(".btn-todos")
+        .classList.add("colete-selecionado");
+    }
 }
 
 function buscarHistorico() {
