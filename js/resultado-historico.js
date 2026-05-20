@@ -38,9 +38,6 @@ async function carregarHistorico() {
             "titulo-resultado"
         );
 
-        titulo.innerHTML =
-            `Resultado Colete ${colete} - ${dataInicial}`;
-
         const resultado = document.getElementById(
             "resultado"
         );
@@ -52,6 +49,144 @@ async function carregarHistorico() {
         const querySnapshot = await getDocs(
             collection(db, "chamadas")
         );
+
+        if(colete === "Todos") {
+
+            titulo.innerHTML =
+                `Resultado Geral - ${dataInicial}`;
+
+            const estatisticas = {
+
+                Amarelo: {
+                    presentes: 0,
+                    faltas: 0
+                },
+
+                Azul: {
+                    presentes: 0,
+                    faltas: 0
+                },
+
+                Verde: {
+                    presentes: 0,
+                    faltas: 0
+                }
+            };
+
+            let totalPresentes = 0;
+
+            let totalFaltas = 0;
+
+            querySnapshot.forEach((documento) => {
+
+                const chamada = documento.data();
+
+                if(
+                    chamada.dataFormatada >= dataInicial
+                    &&
+                    chamada.dataFormatada <= dataFinal
+                ) {
+
+                    const coleteAtual =
+                        chamada.colete;
+
+                    if(
+                        estatisticas[coleteAtual]
+                    ) {
+
+                        if(
+                            chamada.status === "Presente"
+                        ) {
+
+                            estatisticas[
+                                coleteAtual
+                            ].presentes++;
+
+                            totalPresentes++;
+
+                        } else {
+
+                            estatisticas[
+                                coleteAtual
+                            ].faltas++;
+
+                            totalFaltas++;
+                        }
+                    }
+                }
+            });
+
+            Object.keys(estatisticas)
+            .forEach((nomeColete) => {
+
+                resultado.innerHTML += `
+                    <div class="aluno">
+
+                        <div>
+
+                            <strong>
+                                Colete ${nomeColete}
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                ${estatisticas[nomeColete].presentes}
+                                presentes
+                            </span>
+
+                            <br>
+
+                            <span>
+                                ${estatisticas[nomeColete].faltas}
+                                faltas
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+
+            resultado.innerHTML += `
+                <div class="aluno total-geral">
+
+                    <div>
+
+                        <strong>
+                            Total Geral
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            ${totalPresentes}
+                            presentes
+                        </span>
+
+                        <br>
+
+                        <span>
+                            ${totalFaltas}
+                            faltas
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+            esconderLoading();
+
+            return;
+        }
+
+        titulo.innerHTML =
+            `Resultado Colete ${colete} - ${dataInicial}`;
 
         const faltasPorAluno = {};
 
@@ -178,15 +313,17 @@ async function carregarHistorico() {
 
 function ativarEdicao() {
 
-    if(modoEdicao) {
+    if(
+        modoEdicao
+        ||
+        localStorage.getItem(
+            "historicoColete"
+        ) === "Todos"
+    ) {
         return;
     }
 
     modoEdicao = true;
-
-    const resultado = document.getElementById(
-        "resultado"
-    );
 
     chamadasCarregadas.forEach((chamada) => {
 
