@@ -436,3 +436,20 @@ button:active {
 
     font-weight: bold;
 }
+
+.btn-todos {
+
+    background: #374151;
+}
+
+.total-geral {
+
+    background: #dbeafe !important;
+
+    border: 2px solid #2563eb;
+}
+
+.total-geral strong {
+
+    color: #1d4ed8;
+}
