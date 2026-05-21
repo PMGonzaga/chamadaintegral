@@ -454,19 +454,9 @@ async function gerarRelatorioPDF() {
                     );
                 }
 
-                const tagsAluno =
-                    `${aluno.musica ? '🎵 ' : ''}`
-                    +
-                    `${aluno.luta ? '🥊 ' : ''}`
-                    +
-                    `${aluno.atletismo ? '🏃' : ''}`;
-
-                const nomeCompleto =
-                    `${aluno.nome} ${tagsAluno}`;
-
                 const nomeQuebrado =
                     pdf.splitTextToSize(
-                        nomeCompleto,
+                        aluno.nome,
                         60
                     );
 
@@ -597,19 +587,9 @@ async function gerarRelatorioPDF() {
                     );
                 }
 
-                const tagsAluno =
-                    `${aluno.musica ? '🎵 ' : ''}`
-                    +
-                    `${aluno.luta ? '🥊 ' : ''}`
-                    +
-                    `${aluno.atletismo ? '🏃' : ''}`;
-
-                const nomeCompleto =
-                    `${aluno.nome} ${tagsAluno}`;
-
                 const nomeQuebrado =
                     pdf.splitTextToSize(
-                        nomeCompleto,
+                        aluno.nome,
                         60
                     );
 
