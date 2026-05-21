@@ -602,7 +602,7 @@ async function gerarRelatorioPDF() {
                 );
 
                 pdf.text(
-                    aluno.turma,
+                    aluno.colete,
                     90,
                     posicaoY
                 );
