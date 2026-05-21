@@ -462,11 +462,11 @@ button:active {
 
     display: flex;
 
-    gap: 6px;
+    gap: 3px;
 
     align-items: center;
 
-    margin-left: 8px;
+    margin-left: 4px;
 
     flex-wrap: nowrap;
 }
@@ -479,15 +479,17 @@ button:active {
 
     color: #111827;
 
-    width: 32px;
+    width: 18px;
 
-    height: 32px;
+    height: 18px;
 
-    border-radius: 8px;
+    min-width: 18px;
+
+    border-radius: 4px;
 
     cursor: pointer;
 
-    font-size: 14px;
+    font-size: 9px;
 
     display: flex;
 
@@ -506,25 +508,25 @@ button:active {
 
 .tag-icon:hover {
 
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .tag-icon.ativa {
 
-    background: #2563eb;
+    background: #dc2626;
 
     color: white;
 
-    box-shadow: 0 0 0 2px #1d4ed8;
+    box-shadow: 0 0 0 1px #991b1b;
 }
 
 .tags-visualizacao {
 
     display: flex;
 
-    gap: 4px;
+    gap: 3px;
 
-    margin-top: 4px;
+    margin-top: 2px;
 
     flex-wrap: nowrap;
 
@@ -539,15 +541,15 @@ button:active {
 
     justify-content: center;
 
-    width: 20px;
+    width: 14px;
 
-    height: 20px;
+    height: 14px;
 
-    border-radius: 6px;
+    border-radius: 4px;
 
     background: #e5e7eb;
 
-    font-size: 12px;
+    font-size: 8px;
 }
 
 .tag-musica {
@@ -569,20 +571,20 @@ button:active {
 
     display: flex;
 
-    gap: 4px;
+    gap: 3px;
 
-    margin-top: 4px;
+    margin-top: 2px;
 
     align-items: center;
 }
 
 .aluno-tags-chamada .tag-badge {
 
-    width: 20px;
+    width: 14px;
 
-    height: 20px;
+    height: 14px;
 
-    font-size: 12px;
+    font-size: 8px;
 }
 
 @media(max-width: 600px) {
