@@ -85,7 +85,10 @@ async function carregarAlunos() {
 
         querySnapshot.forEach((doc) => {
 
-            alunos.push(doc.data());
+            alunos.push({
+                id: doc.id,
+                ...doc.data()
+            });
         });
 
         alunos.sort((a, b) => {
@@ -115,6 +118,16 @@ async function carregarAlunos() {
                         <small>
                             ${aluno.turma}
                         </small>
+
+                        <div class="tags-visualizacao">
+
+                            ${aluno.musica ? '🎵' : ''}
+
+                            ${aluno.luta ? '🥊' : ''}
+
+                            ${aluno.atletismo ? '🏃' : ''}
+
+                        </div>
 
                     </div>
 
@@ -220,6 +233,12 @@ async function salvarChamada() {
                     turma: aluno.turma,
 
                     colete: aluno.colete,
+
+                    musica: aluno.musica || false,
+
+                    luta: aluno.luta || false,
+
+                    atletismo: aluno.atletismo || false,
 
                     status: document.getElementById(
                         `status-${index}`
