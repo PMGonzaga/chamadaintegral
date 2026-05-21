@@ -1,4 +1,4 @@
-const CACHE_NAME = "chamada-escola-v30";
+const CACHE_NAME = "chamada-escola-v31";
 
 const urlsToCache = [
 
