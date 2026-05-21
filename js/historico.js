@@ -174,6 +174,12 @@ async function gerarRelatorioPDF() {
 
                     colete: chamada.colete,
 
+                    musica: chamada.musica || false,
+
+                    luta: chamada.luta || false,
+
+                    atletismo: chamada.atletismo || false,
+
                     presencas: 0,
 
                     faltas: 0
@@ -418,8 +424,15 @@ async function gerarRelatorioPDF() {
                     );
                 }
 
+                const tagsAluno =
+                    `${aluno.musica ? '🎵 ' : ''}`
+                    +
+                    `${aluno.luta ? '🥊 ' : ''}`
+                    +
+                    `${aluno.atletismo ? '🏃' : ''}`;
+
                 pdf.text(
-                    `${aluno.nome}`,
+                    `${aluno.nome} ${tagsAluno}`,
                     20,
                     y
                 );
@@ -453,6 +466,134 @@ async function gerarRelatorioPDF() {
             });
 
             y += 10;
+        });
+
+        const categorias = [
+            {
+                titulo: "Turma de Música",
+                campo: "musica"
+            },
+            {
+                titulo: "Turma de Luta",
+                campo: "luta"
+            },
+            {
+                titulo: "Turma de Atletismo",
+                campo: "atletismo"
+            }
+        ];
+
+        categorias.forEach((categoria) => {
+
+            const alunosCategoria =
+                alunosOrdenados.filter((aluno) => {
+
+                    return aluno[categoria.campo];
+                });
+
+            if(alunosCategoria.length === 0) {
+
+                return;
+            }
+
+            pdf.addPage();
+
+            pdf.setFontSize(18);
+
+            pdf.setTextColor(
+                0,
+                0,
+                0
+            );
+
+            pdf.text(
+                categoria.titulo,
+                20,
+                20
+            );
+
+            let posicaoY = 40;
+
+            alunosCategoria.forEach((aluno) => {
+
+                const total =
+                    aluno.presencas
+                    +
+                    aluno.faltas;
+
+                const porcentagemPresencaAluno =
+                    (
+                        aluno.presencas
+                        /
+                        total
+                    ) * 100;
+
+                const porcentagemFaltaAluno =
+                    (
+                        aluno.faltas
+                        /
+                        total
+                    ) * 100;
+
+                if(
+                    porcentagemFaltaAluno === 100
+                ) {
+
+                    pdf.setTextColor(
+                        220,
+                        38,
+                        38
+                    );
+
+                } else {
+
+                    pdf.setTextColor(
+                        0,
+                        0,
+                        0
+                    );
+                }
+
+                const tagsAluno =
+                    `${aluno.musica ? '🎵 ' : ''}`
+                    +
+                    `${aluno.luta ? '🥊 ' : ''}`
+                    +
+                    `${aluno.atletismo ? '🏃' : ''}`;
+
+                pdf.text(
+                    `${aluno.nome} ${tagsAluno}`,
+                    20,
+                    posicaoY
+                );
+
+                pdf.text(
+                    `Turma: ${aluno.turma}`,
+                    70,
+                    posicaoY
+                );
+
+                pdf.text(
+                    `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
+                    115,
+                    posicaoY
+                );
+
+                pdf.text(
+                    `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
+                    170,
+                    posicaoY
+                );
+
+                posicaoY += 10;
+
+                if(posicaoY > 270) {
+
+                    pdf.addPage();
+
+                    posicaoY = 20;
+                }
+            });
         });
 
         pdf.save(
