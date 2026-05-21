@@ -42,9 +42,32 @@ async function carregarHistorico() {
             "resultado"
         );
 
+        const btnEditar =
+            document.getElementById(
+                "btn-editar-chamada"
+            );
+
         resultado.innerHTML = "";
 
         chamadasCarregadas = [];
+
+        const pesquisaIndividual =
+            dataInicial === dataFinal;
+
+        if(
+            colete !== "Todos"
+            &&
+            pesquisaIndividual
+        ) {
+
+            btnEditar.style.display =
+                "block";
+
+        } else {
+
+            btnEditar.style.display =
+                "none";
+        }
 
         const querySnapshot = await getDocs(
             collection(db, "chamadas")
@@ -190,9 +213,6 @@ async function carregarHistorico() {
 
         const faltasPorAluno = {};
 
-        const pesquisaIndividual =
-            dataInicial === dataFinal;
-
         querySnapshot.forEach((documento) => {
 
             const chamada = documento.data();
@@ -221,13 +241,37 @@ async function carregarHistorico() {
                     resultado.innerHTML += `
                         <div class="aluno">
 
-                            <div>
+                            <div class="aluno-info">
 
-                                <strong>
-                                    ${chamada.nome}
-                                </strong>
+                                <div class="linha-nome-tags">
 
-                                <br>
+                                    <strong class="nome-aluno">
+                                        ${chamada.nome}
+                                    </strong>
+
+                                    <div class="aluno-tags-chamada">
+
+                                        ${chamada.musica ? `
+                                            <span class="tag-badge tag-musica">
+                                                🎵
+                                            </span>
+                                        ` : ''}
+
+                                        ${chamada.luta ? `
+                                            <span class="tag-badge tag-luta">
+                                                🥊
+                                            </span>
+                                        ` : ''}
+
+                                        ${chamada.atletismo ? `
+                                            <span class="tag-badge tag-atletismo">
+                                                🏃
+                                            </span>
+                                        ` : ''}
+
+                                    </div>
+
+                                </div>
 
                                 <small>
                                     ${chamada.turma}
@@ -255,7 +299,18 @@ async function carregarHistorico() {
 
                         faltasPorAluno[
                             chamada.nome
-                        ] = 0;
+                        ] = {
+
+                            faltas: 0,
+
+                            turma: chamada.turma,
+
+                            musica: chamada.musica,
+
+                            luta: chamada.luta,
+
+                            atletismo: chamada.atletismo
+                        };
                     }
 
                     if(
@@ -264,7 +319,7 @@ async function carregarHistorico() {
 
                         faltasPorAluno[
                             chamada.nome
-                        ]++;
+                        ].faltas++;
                     }
                 }
             }
@@ -276,15 +331,52 @@ async function carregarHistorico() {
                 const nome in faltasPorAluno
             ) {
 
+                const aluno =
+                    faltasPorAluno[nome];
+
                 resultado.innerHTML += `
                     <div class="aluno">
 
-                        <span>
-                            ${nome}
-                        </span>
+                        <div class="aluno-info">
+
+                            <div class="linha-nome-tags">
+
+                                <strong class="nome-aluno">
+                                    ${nome}
+                                </strong>
+
+                                <div class="aluno-tags-chamada">
+
+                                    ${aluno.musica ? `
+                                        <span class="tag-badge tag-musica">
+                                            🎵
+                                        </span>
+                                    ` : ''}
+
+                                    ${aluno.luta ? `
+                                        <span class="tag-badge tag-luta">
+                                            🥊
+                                        </span>
+                                    ` : ''}
+
+                                    ${aluno.atletismo ? `
+                                        <span class="tag-badge tag-atletismo">
+                                            🏃
+                                        </span>
+                                    ` : ''}
+
+                                </div>
+
+                            </div>
+
+                            <small>
+                                ${aluno.turma}
+                            </small>
+
+                        </div>
 
                         <span>
-                            ${faltasPorAluno[nome]} faltas
+                            ${aluno.faltas} faltas
                         </span>
 
                     </div>
@@ -313,12 +405,30 @@ async function carregarHistorico() {
 
 function ativarEdicao() {
 
+    const colete =
+        localStorage.getItem(
+            "historicoColete"
+        );
+
+    const dataInicial =
+        localStorage.getItem(
+            "historicoDataInicial"
+        );
+
+    const dataFinal =
+        localStorage.getItem(
+            "historicoDataFinal"
+        );
+
+    const pesquisaIndividual =
+        dataInicial === dataFinal;
+
     if(
         modoEdicao
         ||
-        localStorage.getItem(
-            "historicoColete"
-        ) === "Todos"
+        colete === "Todos"
+        ||
+        !pesquisaIndividual
     ) {
         return;
     }
