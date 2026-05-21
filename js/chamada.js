@@ -107,27 +107,41 @@ async function carregarAlunos() {
             listaColete.innerHTML += `
                 <div class="aluno">
 
-                    <div>
+                    <div class="aluno-info">
 
-                        <strong>
-                            ${aluno.nome}
-                        </strong>
+                        <div class="linha-nome-tags">
 
-                        <br>
+                            <strong class="nome-aluno">
+                                ${aluno.nome}
+                            </strong>
+
+                            <div class="aluno-tags-chamada">
+
+                                ${aluno.musica ? `
+                                    <span class="tag-badge tag-musica">
+                                        🎵
+                                    </span>
+                                ` : ''}
+
+                                ${aluno.luta ? `
+                                    <span class="tag-badge tag-luta">
+                                        🥊
+                                    </span>
+                                ` : ''}
+
+                                ${aluno.atletismo ? `
+                                    <span class="tag-badge tag-atletismo">
+                                        🏃
+                                    </span>
+                                ` : ''}
+
+                            </div>
+
+                        </div>
 
                         <small>
                             ${aluno.turma}
                         </small>
-
-                        <div class="tags-visualizacao">
-
-                            ${aluno.musica ? '🎵' : ''}
-
-                            ${aluno.luta ? '🥊' : ''}
-
-                            ${aluno.atletismo ? '🏃' : ''}
-
-                        </div>
 
                     </div>
 
