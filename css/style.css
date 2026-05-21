@@ -404,6 +404,8 @@ button:active {
     gap: 6px;
 
     align-items: center;
+
+    flex-wrap: wrap;
 }
 
 .status-chamada {
@@ -452,4 +454,141 @@ button:active {
 .total-geral strong {
 
     color: #1d4ed8;
+}
+
+/* TAGS */
+
+.tags-aluno {
+
+    display: flex;
+
+    gap: 6px;
+
+    margin-top: 6px;
+
+    flex-wrap: wrap;
+}
+
+.tag-icon {
+
+    width: 32px;
+
+    height: 32px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #d1d5db;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition: 0.2s;
+}
+
+.tag-icon:hover {
+
+    transform: scale(1.05);
+}
+
+.tag-icon.ativa {
+
+    background: #2563eb;
+
+    color: white;
+
+    box-shadow: 0 0 0 2px #1d4ed8;
+}
+
+.tags-visualizacao {
+
+    display: flex;
+
+    gap: 4px;
+
+    margin-top: 4px;
+
+    flex-wrap: wrap;
+}
+
+.tag-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 24px;
+
+    height: 24px;
+
+    border-radius: 6px;
+
+    background: #e5e7eb;
+
+    font-size: 14px;
+}
+
+.tag-musica {
+
+    background: #dbeafe;
+}
+
+.tag-luta {
+
+    background: #fee2e2;
+}
+
+.tag-atletismo {
+
+    background: #dcfce7;
+}
+
+.aluno-tags-chamada {
+
+    display: flex;
+
+    gap: 4px;
+
+    margin-top: 4px;
+}
+
+.aluno-tags-chamada .tag-badge {
+
+    width: 22px;
+
+    height: 22px;
+
+    font-size: 13px;
+}
+
+@media(max-width: 600px) {
+
+    .aluno {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .aluno-acoes {
+
+        width: 100%;
+
+        justify-content: flex-end;
+    }
+
+    .aluno select {
+
+        width: 100%;
+    }
 }
