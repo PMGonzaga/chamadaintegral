@@ -339,37 +339,41 @@ async function listarAlunos() {
 
                     <div class="aluno-info">
 
-                        <span>
-                            ${aluno.nome}
-                            -
-                            ${aluno.turma}
-                        </span>
+                        <div class="linha-nome-tags">
 
-                        <div class="tags-aluno">
+                            <span class="nome-aluno">
+                                ${aluno.nome}
+                                -
+                                ${aluno.turma}
+                            </span>
 
-                            <button
-                                class="tag-btn ${aluno.musica ? 'tag-ativa' : ''}"
-                                onclick="alternarTag('${aluno.id}', ${aluno.musica || false}, 'musica')"
-                                type="button"
-                            >
-                                🎵
-                            </button>
+                            <div class="tags-aluno">
 
-                            <button
-                                class="tag-btn ${aluno.luta ? 'tag-ativa' : ''}"
-                                onclick="alternarTag('${aluno.id}', ${aluno.luta || false}, 'luta')"
-                                type="button"
-                            >
-                                🥊
-                            </button>
+                                <button
+                                    class="tag-btn ${aluno.musica ? 'tag-ativa' : ''}"
+                                    onclick="alternarTag('${aluno.id}', ${aluno.musica || false}, 'musica')"
+                                    type="button"
+                                >
+                                    🎵
+                                </button>
 
-                            <button
-                                class="tag-btn ${aluno.atletismo ? 'tag-ativa' : ''}"
-                                onclick="alternarTag('${aluno.id}', ${aluno.atletismo || false}, 'atletismo')"
-                                type="button"
-                            >
-                                🏃
-                            </button>
+                                <button
+                                    class="tag-btn ${aluno.luta ? 'tag-ativa' : ''}"
+                                    onclick="alternarTag('${aluno.id}', ${aluno.luta || false}, 'luta')"
+                                    type="button"
+                                >
+                                    🥊
+                                </button>
+
+                                <button
+                                    class="tag-btn ${aluno.atletismo ? 'tag-ativa' : ''}"
+                                    onclick="alternarTag('${aluno.id}', ${aluno.atletismo || false}, 'atletismo')"
+                                    type="button"
+                                >
+                                    🏃
+                                </button>
+
+                            </div>
 
                         </div>
 
