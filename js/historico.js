@@ -277,7 +277,7 @@ async function gerarRelatorioPDF() {
         pdf.setFontSize(20);
 
         pdf.text(
-            "Relatório Geral de Faltas",
+            "Relatório Geral de Faltas do Integral",
             45,
             20
         );
