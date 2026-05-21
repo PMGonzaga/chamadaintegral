@@ -362,6 +362,12 @@ async function gerarRelatorioPDF() {
 
             pdf.setFontSize(15);
 
+            pdf.setTextColor(
+                0,
+                0,
+                0
+            );
+
             pdf.text(
                 `Colete ${nomeColete}`,
                 20,
@@ -392,6 +398,25 @@ async function gerarRelatorioPDF() {
                     ) * 100;
 
                 pdf.setFontSize(11);
+
+                if(
+                    porcentagemFaltaAluno === 100
+                ) {
+
+                    pdf.setTextColor(
+                        220,
+                        38,
+                        38
+                    );
+
+                } else {
+
+                    pdf.setTextColor(
+                        0,
+                        0,
+                        0
+                    );
+                }
 
                 pdf.text(
                     `${aluno.nome}`,
