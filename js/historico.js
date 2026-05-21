@@ -1,3 +1,12 @@
+import {
+    db
+} from "./firebase.js";
+
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 function selecionarColete(colete) {
 
     document.getElementById("colete").value =
@@ -88,6 +97,379 @@ function buscarHistorico() {
         "resultado-historico.html";
 }
 
+async function gerarRelatorioPDF() {
+
+    mostrarLoading();
+
+    try {
+
+        const colete = document.getElementById(
+            "colete"
+        ).value.trim();
+
+        const dataInicial = document.getElementById(
+            "data-inicial"
+        ).value;
+
+        const dataFinal = document.getElementById(
+            "data-final"
+        ).value;
+
+        if(
+            colete === ""
+            ||
+            dataInicial === ""
+            ||
+            dataFinal === ""
+        ) {
+
+            alert(
+                "Preencha todos os campos"
+            );
+
+            esconderLoading();
+
+            return;
+        }
+
+        const querySnapshot = await getDocs(
+            collection(db, "chamadas")
+        );
+
+        const chamadas = [];
+
+        querySnapshot.forEach((documento) => {
+
+            const chamada = documento.data();
+
+            if(
+                chamada.dataFormatada >= dataInicial
+                &&
+                chamada.dataFormatada <= dataFinal
+            ) {
+
+                if(
+                    colete === "Todos"
+                    ||
+                    chamada.colete === colete
+                ) {
+
+                    chamadas.push(chamada);
+                }
+            }
+        });
+
+        if(chamadas.length === 0) {
+
+            alert(
+                "Nenhum resultado encontrado"
+            );
+
+            esconderLoading();
+
+            return;
+        }
+
+        let totalPresencas = 0;
+
+        let totalFaltas = 0;
+
+        const alunos = {};
+
+        chamadas.forEach((chamada) => {
+
+            if(
+                chamada.status === "Presente"
+            ) {
+
+                totalPresencas++;
+
+            } else {
+
+                totalFaltas++;
+            }
+
+            if(
+                !alunos[chamada.nome]
+            ) {
+
+                alunos[chamada.nome] = {
+
+                    nome: chamada.nome,
+
+                    turma: chamada.turma,
+
+                    colete: chamada.colete,
+
+                    presencas: 0,
+
+                    faltas: 0
+                };
+            }
+
+            if(
+                chamada.status === "Presente"
+            ) {
+
+                alunos[chamada.nome]
+                .presencas++;
+
+            } else {
+
+                alunos[chamada.nome]
+                .faltas++;
+            }
+        });
+
+        const totalChamadas =
+            totalPresencas + totalFaltas;
+
+        const porcentagemPresenca =
+            (
+                totalPresencas
+                /
+                totalChamadas
+            ) * 100;
+
+        const porcentagemFalta =
+            (
+                totalFaltas
+                /
+                totalChamadas
+            ) * 100;
+
+        const canvas =
+            document.createElement("canvas");
+
+        canvas.width = 500;
+
+        canvas.height = 500;
+
+        const ctx =
+            canvas.getContext("2d");
+
+        new Chart(ctx, {
+
+            type: "pie",
+
+            data: {
+
+                labels: [
+                    "Presenças",
+                    "Faltas"
+                ],
+
+                datasets: [{
+
+                    data: [
+                        porcentagemPresenca,
+                        porcentagemFalta
+                    ],
+
+                    backgroundColor: [
+                        "#16a34a",
+                        "#dc2626"
+                    ]
+                }]
+            },
+
+            options: {
+
+                responsive: false,
+
+                plugins: {
+
+                    legend: {
+
+                        position: "bottom"
+                    }
+                }
+            }
+        });
+
+        await new Promise((resolve) => {
+
+            setTimeout(resolve, 1000);
+        });
+
+        const imagemGrafico =
+            canvas.toDataURL("image/png");
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+        const pdf = new jsPDF();
+
+        pdf.setFontSize(20);
+
+        pdf.text(
+            "Relatório de Faltas",
+            60,
+            20
+        );
+
+        pdf.setFontSize(12);
+
+        pdf.text(
+            `Período: ${dataInicial} até ${dataFinal}`,
+            20,
+            35
+        );
+
+        pdf.text(
+            `Colete: ${colete}`,
+            20,
+            45
+        );
+
+        pdf.addImage(
+            imagemGrafico,
+            "PNG",
+            25,
+            60,
+            160,
+            160
+        );
+
+        pdf.text(
+            `Presenças: ${porcentagemPresenca.toFixed(1)}%`,
+            20,
+            235
+        );
+
+        pdf.text(
+            `Faltas: ${porcentagemFalta.toFixed(1)}%`,
+            20,
+            245
+        );
+
+        pdf.addPage();
+
+        pdf.setFontSize(18);
+
+        pdf.text(
+            "Relatório por Aluno",
+            60,
+            20
+        );
+
+        let y = 40;
+
+        const alunosOrdenados =
+            Object.values(alunos)
+            .sort((a, b) => {
+
+                return a.nome.localeCompare(
+                    b.nome,
+                    "pt-BR",
+                    {
+                        sensitivity: "base"
+                    }
+                );
+            });
+
+        const coletes = [
+            "Amarelo",
+            "Azul",
+            "Verde"
+        ];
+
+        coletes.forEach((nomeColete) => {
+
+            const alunosColete =
+                alunosOrdenados.filter(
+                    (aluno) => {
+
+                        return aluno.colete
+                        === nomeColete;
+                    }
+                );
+
+            if(
+                alunosColete.length === 0
+            ) {
+
+                return;
+            }
+
+            pdf.setFontSize(15);
+
+            pdf.text(
+                `Colete ${nomeColete}`,
+                20,
+                y
+            );
+
+            y += 10;
+
+            alunosColete.forEach((aluno) => {
+
+                const total =
+                    aluno.presencas
+                    +
+                    aluno.faltas;
+
+                const porcentagemPresencaAluno =
+                    (
+                        aluno.presencas
+                        /
+                        total
+                    ) * 100;
+
+                const porcentagemFaltaAluno =
+                    (
+                        aluno.faltas
+                        /
+                        total
+                    ) * 100;
+
+                pdf.setFontSize(11);
+
+                pdf.text(
+                    `${aluno.nome}`,
+                    20,
+                    y
+                );
+
+                pdf.text(
+                    `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
+                    110,
+                    y
+                );
+
+                pdf.text(
+                    `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
+                    160,
+                    y
+                );
+
+                y += 10;
+
+                if(y > 270) {
+
+                    pdf.addPage();
+
+                    y = 20;
+                }
+            });
+
+            y += 10;
+        });
+
+        pdf.save(
+            `relatorio-${colete}-${dataInicial}.pdf`
+        );
+
+    } finally {
+
+        esconderLoading();
+    }
+}
+
 window.buscarHistorico = buscarHistorico;
 
 window.selecionarColete = selecionarColete;
+
+window.gerarRelatorioPDF =
+    gerarRelatorioPDF;
