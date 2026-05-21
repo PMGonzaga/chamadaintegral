@@ -397,6 +397,24 @@ button:active {
     min-width: 0;
 }
 
+.linha-nome-tags {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+}
+
+.nome-aluno {
+
+    font-size: 15px;
+
+    word-break: break-word;
+}
+
 .aluno-acoes {
 
     display: flex;
@@ -462,16 +480,12 @@ button:active {
 
     display: flex;
 
-    gap: 3px;
+    gap: 4px;
 
     align-items: center;
-
-    margin-left: 4px;
-
-    flex-wrap: nowrap;
 }
 
-.tag-icon {
+.tag-btn {
 
     border: none;
 
@@ -479,17 +493,17 @@ button:active {
 
     color: #111827;
 
-    width: 18px;
+    width: 20px;
 
-    height: 18px;
+    height: 20px;
 
-    min-width: 18px;
+    min-width: 20px;
 
     border-radius: 4px;
 
     cursor: pointer;
 
-    font-size: 9px;
+    font-size: 10px;
 
     display: flex;
 
@@ -497,27 +511,25 @@ button:active {
 
     justify-content: center;
 
-    flex-shrink: 0;
-
     padding: 0;
 
     margin: 0;
 
+    line-height: 1;
+
     transition: 0.2s;
 }
 
-.tag-icon:hover {
+.tag-btn:hover {
 
     transform: scale(1.08);
 }
 
-.tag-icon.ativa {
+.tag-ativa {
 
     background: #dc2626;
 
     color: white;
-
-    box-shadow: 0 0 0 1px #991b1b;
 }
 
 .tags-visualizacao {
@@ -604,6 +616,11 @@ button:active {
     }
 
     .aluno select {
+
+        width: 100%;
+    }
+
+    .linha-nome-tags {
 
         width: 100%;
     }
