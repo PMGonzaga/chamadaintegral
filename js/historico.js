@@ -366,6 +366,13 @@ async function gerarRelatorioPDF() {
                 return;
             }
 
+            if(y > 240) {
+
+                pdf.addPage();
+
+                y = 20;
+            }
+
             pdf.setFontSize(15);
 
             pdf.setTextColor(
@@ -380,7 +387,7 @@ async function gerarRelatorioPDF() {
                 y
             );
 
-            y += 10;
+            y += 12;
 
             alunosColete.forEach((aluno) => {
 
@@ -403,7 +410,7 @@ async function gerarRelatorioPDF() {
                         total
                     ) * 100;
 
-                pdf.setFontSize(11);
+                pdf.setFontSize(10);
 
                 if(
                     porcentagemFaltaAluno === 100
@@ -431,27 +438,33 @@ async function gerarRelatorioPDF() {
                     +
                     `${aluno.atletismo ? '🏃' : ''}`;
 
+                const nomeCompleto =
+                    `${aluno.nome} ${tagsAluno}`;
+
                 pdf.text(
-                    `${aluno.nome} ${tagsAluno}`,
+                    nomeCompleto,
                     20,
+                    y,
+                    {
+                        maxWidth: 70
+                    }
+                );
+
+                pdf.text(
+                    aluno.turma,
+                    95,
                     y
                 );
 
                 pdf.text(
-                    `Turma: ${aluno.turma}`,
-                    70,
+                    `${porcentagemPresencaAluno.toFixed(1)}%`,
+                    145,
                     y
                 );
 
                 pdf.text(
-                    `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
-                    115,
-                    y
-                );
-
-                pdf.text(
-                    `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
-                    170,
+                    `${porcentagemFaltaAluno.toFixed(1)}%`,
+                    180,
                     y
                 );
 
@@ -465,20 +478,20 @@ async function gerarRelatorioPDF() {
                 }
             });
 
-            y += 10;
+            y += 15;
         });
 
         const categorias = [
             {
-                titulo: "Turma de Música",
+                titulo: "Turma Música",
                 campo: "musica"
             },
             {
-                titulo: "Turma de Luta",
+                titulo: "Turma Luta",
                 campo: "luta"
             },
             {
-                titulo: "Turma de Atletismo",
+                titulo: "Turma Atletismo",
                 campo: "atletismo"
             }
         ];
@@ -496,9 +509,14 @@ async function gerarRelatorioPDF() {
                 return;
             }
 
-            pdf.addPage();
+            if(y > 220) {
 
-            pdf.setFontSize(18);
+                pdf.addPage();
+
+                y = 20;
+            }
+
+            pdf.setFontSize(16);
 
             pdf.setTextColor(
                 0,
@@ -509,10 +527,10 @@ async function gerarRelatorioPDF() {
             pdf.text(
                 categoria.titulo,
                 20,
-                20
+                y
             );
 
-            let posicaoY = 40;
+            y += 12;
 
             alunosCategoria.forEach((aluno) => {
 
@@ -561,39 +579,49 @@ async function gerarRelatorioPDF() {
                     +
                     `${aluno.atletismo ? '🏃' : ''}`;
 
+                const nomeCompleto =
+                    `${aluno.nome} ${tagsAluno}`;
+
+                pdf.setFontSize(10);
+
                 pdf.text(
-                    `${aluno.nome} ${tagsAluno}`,
+                    nomeCompleto,
                     20,
-                    posicaoY
+                    y,
+                    {
+                        maxWidth: 70
+                    }
                 );
 
                 pdf.text(
-                    `Turma: ${aluno.turma}`,
-                    70,
-                    posicaoY
+                    aluno.turma,
+                    95,
+                    y
                 );
 
                 pdf.text(
-                    `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
-                    115,
-                    posicaoY
+                    `${porcentagemPresencaAluno.toFixed(1)}%`,
+                    145,
+                    y
                 );
 
                 pdf.text(
-                    `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
-                    170,
-                    posicaoY
+                    `${porcentagemFaltaAluno.toFixed(1)}%`,
+                    180,
+                    y
                 );
 
-                posicaoY += 10;
+                y += 10;
 
-                if(posicaoY > 270) {
+                if(y > 270) {
 
                     pdf.addPage();
 
-                    posicaoY = 20;
+                    y = 20;
                 }
             });
+
+            y += 15;
         });
 
         pdf.save(
