@@ -116,6 +116,21 @@ async function gerarRelatorioPDF() {
             collection(db, "chamadas")
         );
 
+        const alunosSnapshot = await getDocs(
+            collection(db, "alunos")
+        );
+
+        const mapaAlunos = {};
+
+        alunosSnapshot.forEach((documento) => {
+
+            const aluno = documento.data();
+
+            mapaAlunos[
+                aluno.nome.toLowerCase()
+            ] = aluno;
+        });
+
         const chamadas = [];
 
         querySnapshot.forEach((documento) => {
@@ -166,6 +181,11 @@ async function gerarRelatorioPDF() {
                 !alunos[chamada.nome]
             ) {
 
+                const dadosAluno =
+                    mapaAlunos[
+                        chamada.nome.toLowerCase()
+                    ] || {};
+
                 alunos[chamada.nome] = {
 
                     nome: chamada.nome,
@@ -174,11 +194,14 @@ async function gerarRelatorioPDF() {
 
                     colete: chamada.colete,
 
-                    musica: chamada.musica || false,
+                    musica:
+                        dadosAluno.musica || false,
 
-                    luta: chamada.luta || false,
+                    luta:
+                        dadosAluno.luta || false,
 
-                    atletismo: chamada.atletismo || false,
+                    atletismo:
+                        dadosAluno.atletismo || false,
 
                     presencas: 0,
 
@@ -441,34 +464,39 @@ async function gerarRelatorioPDF() {
                 const nomeCompleto =
                     `${aluno.nome} ${tagsAluno}`;
 
+                const nomeQuebrado =
+                    pdf.splitTextToSize(
+                        nomeCompleto,
+                        60
+                    );
+
                 pdf.text(
-                    nomeCompleto,
+                    nomeQuebrado,
                     20,
-                    y,
-                    {
-                        maxWidth: 70
-                    }
+                    y
                 );
 
                 pdf.text(
                     aluno.turma,
-                    95,
+                    90,
                     y
                 );
 
                 pdf.text(
                     `${porcentagemPresencaAluno.toFixed(1)}%`,
-                    145,
+                    140,
                     y
                 );
 
                 pdf.text(
                     `${porcentagemFaltaAluno.toFixed(1)}%`,
-                    180,
+                    175,
                     y
                 );
 
-                y += 10;
+                y += (
+                    nomeQuebrado.length * 6
+                ) + 4;
 
                 if(y > 270) {
 
@@ -501,7 +529,9 @@ async function gerarRelatorioPDF() {
             const alunosCategoria =
                 alunosOrdenados.filter((aluno) => {
 
-                    return aluno[categoria.campo];
+                    return aluno[
+                        categoria.campo
+                    ];
                 });
 
             if(alunosCategoria.length === 0) {
@@ -509,14 +539,9 @@ async function gerarRelatorioPDF() {
                 return;
             }
 
-            if(y > 220) {
+            pdf.addPage();
 
-                pdf.addPage();
-
-                y = 20;
-            }
-
-            pdf.setFontSize(16);
+            pdf.setFontSize(18);
 
             pdf.setTextColor(
                 0,
@@ -527,10 +552,10 @@ async function gerarRelatorioPDF() {
             pdf.text(
                 categoria.titulo,
                 20,
-                y
+                20
             );
 
-            y += 12;
+            let posicaoY = 40;
 
             alunosCategoria.forEach((aluno) => {
 
@@ -582,46 +607,49 @@ async function gerarRelatorioPDF() {
                 const nomeCompleto =
                     `${aluno.nome} ${tagsAluno}`;
 
+                const nomeQuebrado =
+                    pdf.splitTextToSize(
+                        nomeCompleto,
+                        60
+                    );
+
                 pdf.setFontSize(10);
 
                 pdf.text(
-                    nomeCompleto,
+                    nomeQuebrado,
                     20,
-                    y,
-                    {
-                        maxWidth: 70
-                    }
+                    posicaoY
                 );
 
                 pdf.text(
                     aluno.turma,
-                    95,
-                    y
+                    90,
+                    posicaoY
                 );
 
                 pdf.text(
                     `${porcentagemPresencaAluno.toFixed(1)}%`,
-                    145,
-                    y
+                    140,
+                    posicaoY
                 );
 
                 pdf.text(
                     `${porcentagemFaltaAluno.toFixed(1)}%`,
-                    180,
-                    y
+                    175,
+                    posicaoY
                 );
 
-                y += 10;
+                posicaoY += (
+                    nomeQuebrado.length * 6
+                ) + 4;
 
-                if(y > 270) {
+                if(posicaoY > 270) {
 
                     pdf.addPage();
 
-                    y = 20;
+                    posicaoY = 20;
                 }
             });
-
-            y += 15;
         });
 
         pdf.save(
