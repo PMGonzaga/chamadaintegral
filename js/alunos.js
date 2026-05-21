@@ -97,6 +97,11 @@ async function cadastrarAluno() {
             nome,
             turma,
             colete,
+
+            musica: false,
+            luta: false,
+            atletismo: false,
+
             criadoEm: new Date()
         });
 
@@ -193,6 +198,27 @@ async function deletarAluno(id) {
 
         await deleteDoc(
             doc(db, "alunos", id)
+        );
+
+        listarAlunos();
+
+    } finally {
+
+        esconderLoading();
+    }
+}
+
+async function alternarTag(id, tagAtual, campo) {
+
+    mostrarLoading();
+
+    try {
+
+        await updateDoc(
+            doc(db, "alunos", id),
+            {
+                [campo]: !tagAtual
+            }
         );
 
         listarAlunos();
@@ -311,11 +337,43 @@ async function listarAlunos() {
             const htmlAluno = `
                 <div class="aluno ${classeSemPresenca}">
 
-                    <span>
-                        ${aluno.nome}
-                        -
-                        ${aluno.turma}
-                    </span>
+                    <div class="aluno-info">
+
+                        <span>
+                            ${aluno.nome}
+                            -
+                            ${aluno.turma}
+                        </span>
+
+                        <div class="tags-aluno">
+
+                            <button
+                                class="tag-btn ${aluno.musica ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.musica || false}, 'musica')"
+                                type="button"
+                            >
+                                🎵
+                            </button>
+
+                            <button
+                                class="tag-btn ${aluno.luta ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.luta || false}, 'luta')"
+                                type="button"
+                            >
+                                🥊
+                            </button>
+
+                            <button
+                                class="tag-btn ${aluno.atletismo ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.atletismo || false}, 'atletismo')"
+                                type="button"
+                            >
+                                🏃
+                            </button>
+
+                        </div>
+
+                    </div>
 
                     <div class="acoes">
 
@@ -392,3 +450,5 @@ window.deletarAluno = deletarAluno;
 window.editarAluno = editarAluno;
 
 window.selecionarColete = selecionarColete;
+
+window.alternarTag = alternarTag;
