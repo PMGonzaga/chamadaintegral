@@ -103,34 +103,14 @@ async function gerarRelatorioPDF() {
 
     try {
 
-        const colete = document.getElementById(
-            "colete"
-        ).value.trim();
+        const anoAtual =
+            new Date().getFullYear();
 
-        const dataInicial = document.getElementById(
-            "data-inicial"
-        ).value;
+        const dataInicial =
+            `${anoAtual}-01-01`;
 
-        const dataFinal = document.getElementById(
-            "data-final"
-        ).value;
-
-        if(
-            colete === ""
-            ||
-            dataInicial === ""
-            ||
-            dataFinal === ""
-        ) {
-
-            alert(
-                "Preencha todos os campos"
-            );
-
-            esconderLoading();
-
-            return;
-        }
+        const dataFinal =
+            `${anoAtual}-12-31`;
 
         const querySnapshot = await getDocs(
             collection(db, "chamadas")
@@ -148,21 +128,14 @@ async function gerarRelatorioPDF() {
                 chamada.dataFormatada <= dataFinal
             ) {
 
-                if(
-                    colete === "Todos"
-                    ||
-                    chamada.colete === colete
-                ) {
-
-                    chamadas.push(chamada);
-                }
+                chamadas.push(chamada);
             }
         });
 
         if(chamadas.length === 0) {
 
             alert(
-                "Nenhum resultado encontrado"
+                "Nenhum resultado encontrado no ano atual"
             );
 
             esconderLoading();
@@ -304,30 +277,24 @@ async function gerarRelatorioPDF() {
         pdf.setFontSize(20);
 
         pdf.text(
-            "Relatório de Faltas",
-            60,
+            "Relatório Geral de Faltas",
+            45,
             20
         );
 
         pdf.setFontSize(12);
 
         pdf.text(
-            `Período: ${dataInicial} até ${dataFinal}`,
+            `Ano: ${anoAtual}`,
             20,
             35
-        );
-
-        pdf.text(
-            `Colete: ${colete}`,
-            20,
-            45
         );
 
         pdf.addImage(
             imagemGrafico,
             "PNG",
             25,
-            60,
+            50,
             160,
             160
         );
@@ -335,13 +302,13 @@ async function gerarRelatorioPDF() {
         pdf.text(
             `Presenças: ${porcentagemPresenca.toFixed(1)}%`,
             20,
-            235
+            225
         );
 
         pdf.text(
             `Faltas: ${porcentagemFalta.toFixed(1)}%`,
             20,
-            245
+            235
         );
 
         pdf.addPage();
@@ -434,13 +401,13 @@ async function gerarRelatorioPDF() {
 
                 pdf.text(
                     `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
-                    110,
+                    100,
                     y
                 );
 
                 pdf.text(
                     `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
-                    160,
+                    155,
                     y
                 );
 
@@ -458,7 +425,7 @@ async function gerarRelatorioPDF() {
         });
 
         pdf.save(
-            `relatorio-${colete}-${dataInicial}.pdf`
+            `relatorio-geral-${anoAtual}.pdf`
         );
 
     } finally {
