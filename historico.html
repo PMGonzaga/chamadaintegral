@@ -7,6 +7,10 @@
     <title>Histórico de Faltas</title>
 
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -75,6 +79,10 @@
 
         <button onclick="buscarHistorico()">
             Buscar Histórico
+        </button>
+
+        <button onclick="gerarRelatorioPDF()">
+            Gerar Relatório PDF
         </button>
 
         <button onclick="window.location.href='dashboard.html'">
