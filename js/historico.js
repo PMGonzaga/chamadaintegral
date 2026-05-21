@@ -425,14 +425,20 @@ async function gerarRelatorioPDF() {
                 );
 
                 pdf.text(
+                    `Turma: ${aluno.turma}`,
+                    70,
+                    y
+                );
+
+                pdf.text(
                     `Presença: ${porcentagemPresencaAluno.toFixed(1)}%`,
-                    100,
+                    115,
                     y
                 );
 
                 pdf.text(
                     `Falta: ${porcentagemFaltaAluno.toFixed(1)}%`,
-                    155,
+                    170,
                     y
                 );
 
