@@ -650,3 +650,25 @@ button:active {
 
     font-size: 15px;
 }
+
+/* BOTÃO SALVAR CHAMADA */
+
+.container-btn-salvar {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-top: 20px;
+}
+
+#btn-salvar-chamada-lista {
+
+    background: #16a34a;
+
+    width: 220px;
+
+    max-width: 100%;
+}
