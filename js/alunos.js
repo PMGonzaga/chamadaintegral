@@ -11,6 +11,8 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+let todosAlunos = [];
+
 function selecionarColete(colete) {
 
     document.getElementById("colete").value =
@@ -229,6 +231,170 @@ async function alternarTag(id, tagAtual, campo) {
     }
 }
 
+function renderizarAlunos(alunos) {
+
+    const listaAmarelo = document.getElementById(
+        "lista-amarelo"
+    );
+
+    const listaAzul = document.getElementById(
+        "lista-azul"
+    );
+
+    const listaVerde = document.getElementById(
+        "lista-verde"
+    );
+
+    listaAmarelo.innerHTML = "";
+
+    listaAzul.innerHTML = "";
+
+    listaVerde.innerHTML = "";
+
+    let quantidadeAmarelo = 0;
+    let quantidadeAzul = 0;
+    let quantidadeVerde = 0;
+
+    alunos.forEach((aluno) => {
+
+        const semPresenca =
+            aluno.semPresenca;
+
+        const classeSemPresenca =
+            semPresenca
+            ? "aluno-sem-presenca"
+            : "";
+
+        const htmlAluno = `
+            <div class="aluno ${classeSemPresenca}">
+
+                <div class="aluno-info">
+
+                    <div class="linha-nome-tags">
+
+                        <span class="nome-aluno">
+                            ${aluno.nome}
+                            -
+                            ${aluno.turma}
+                        </span>
+
+                        <div class="tags-aluno">
+
+                            <button
+                                class="tag-btn ${aluno.musica ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.musica || false}, 'musica')"
+                                type="button"
+                            >
+                                🎵
+                            </button>
+
+                            <button
+                                class="tag-btn ${aluno.luta ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.luta || false}, 'luta')"
+                                type="button"
+                            >
+                                🥊
+                            </button>
+
+                            <button
+                                class="tag-btn ${aluno.atletismo ? 'tag-ativa' : ''}"
+                                onclick="alternarTag('${aluno.id}', ${aluno.atletismo || false}, 'atletismo')"
+                                type="button"
+                            >
+                                🏃
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="acoes">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarAluno(
+                            '${aluno.id}',
+                            '${aluno.nome}',
+                            '${aluno.turma}',
+                            '${aluno.colete}'
+                        )"
+                    >
+                        ✏️
+                    </button>
+
+                    <button
+                        class="btn-deletar"
+                        onclick="deletarAluno('${aluno.id}')"
+                    >
+                        🗑
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        if(aluno.colete === "Amarelo") {
+
+            quantidadeAmarelo++;
+
+            listaAmarelo.innerHTML += htmlAluno;
+        }
+
+        if(aluno.colete === "Azul") {
+
+            quantidadeAzul++;
+
+            listaAzul.innerHTML += htmlAluno;
+        }
+
+        if(aluno.colete === "Verde") {
+
+            quantidadeVerde++;
+
+            listaVerde.innerHTML += htmlAluno;
+        }
+    });
+
+    document.getElementById("titulo-amarelo")
+    .innerText =
+        `Lista do Colete Amarelo (${quantidadeAmarelo})`;
+
+    document.getElementById("titulo-azul")
+    .innerText =
+        `Lista do Colete Azul (${quantidadeAzul})`;
+
+    document.getElementById("titulo-verde")
+    .innerText =
+        `Lista do Colete Verde (${quantidadeVerde})`;
+}
+
+function filtrarAlunos() {
+
+    const busca = document.getElementById(
+        "buscar-aluno"
+    ).value.toLowerCase().trim();
+
+    if(!busca) {
+
+        renderizarAlunos(todosAlunos);
+
+        return;
+    }
+
+    const alunosFiltrados =
+        todosAlunos.filter((aluno) => {
+
+            return aluno.nome
+            .toLowerCase()
+            .includes(busca);
+        });
+
+    renderizarAlunos(alunosFiltrados);
+}
+
 async function listarAlunos() {
 
     mostrarLoading();
@@ -242,24 +408,6 @@ async function listarAlunos() {
         const chamadasSnapshot = await getDocs(
             collection(db, "chamadas")
         );
-
-        const listaAmarelo = document.getElementById(
-            "lista-amarelo"
-        );
-
-        const listaAzul = document.getElementById(
-            "lista-azul"
-        );
-
-        const listaVerde = document.getElementById(
-            "lista-verde"
-        );
-
-        listaAmarelo.innerHTML = "";
-
-        listaAzul.innerHTML = "";
-
-        listaVerde.innerHTML = "";
 
         const alunos = [];
 
@@ -318,126 +466,20 @@ async function listarAlunos() {
             );
         });
 
-        let quantidadeAmarelo = 0;
-        let quantidadeAzul = 0;
-        let quantidadeVerde = 0;
+        todosAlunos = alunos.map((aluno) => {
 
-        alunos.forEach((aluno) => {
+            return {
 
-            const semPresenca =
-                !alunosComPresenca.includes(
-                    aluno.nome.toLowerCase()
-                );
+                ...aluno,
 
-            const classeSemPresenca =
-                semPresenca
-                ? "aluno-sem-presenca"
-                : "";
-
-            const htmlAluno = `
-                <div class="aluno ${classeSemPresenca}">
-
-                    <div class="aluno-info">
-
-                        <div class="linha-nome-tags">
-
-                            <span class="nome-aluno">
-                                ${aluno.nome}
-                                -
-                                ${aluno.turma}
-                            </span>
-
-                            <div class="tags-aluno">
-
-                                <button
-                                    class="tag-btn ${aluno.musica ? 'tag-ativa' : ''}"
-                                    onclick="alternarTag('${aluno.id}', ${aluno.musica || false}, 'musica')"
-                                    type="button"
-                                >
-                                    🎵
-                                </button>
-
-                                <button
-                                    class="tag-btn ${aluno.luta ? 'tag-ativa' : ''}"
-                                    onclick="alternarTag('${aluno.id}', ${aluno.luta || false}, 'luta')"
-                                    type="button"
-                                >
-                                    🥊
-                                </button>
-
-                                <button
-                                    class="tag-btn ${aluno.atletismo ? 'tag-ativa' : ''}"
-                                    onclick="alternarTag('${aluno.id}', ${aluno.atletismo || false}, 'atletismo')"
-                                    type="button"
-                                >
-                                    🏃
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="acoes">
-
-                        <button
-                            class="btn-editar"
-                            onclick="editarAluno(
-                                '${aluno.id}',
-                                '${aluno.nome}',
-                                '${aluno.turma}',
-                                '${aluno.colete}'
-                            )"
-                        >
-                            ✏️
-                        </button>
-
-                        <button
-                            class="btn-deletar"
-                            onclick="deletarAluno('${aluno.id}')"
-                        >
-                            🗑
-                        </button>
-
-                    </div>
-
-                </div>
-            `;
-
-            if(aluno.colete === "Amarelo") {
-
-                quantidadeAmarelo++;
-
-                listaAmarelo.innerHTML += htmlAluno;
-            }
-
-            if(aluno.colete === "Azul") {
-
-                quantidadeAzul++;
-
-                listaAzul.innerHTML += htmlAluno;
-            }
-
-            if(aluno.colete === "Verde") {
-
-                quantidadeVerde++;
-
-                listaVerde.innerHTML += htmlAluno;
-            }
+                semPresenca:
+                    !alunosComPresenca.includes(
+                        aluno.nome.toLowerCase()
+                    )
+            };
         });
 
-        document.getElementById("titulo-amarelo")
-        .innerText =
-            `Lista do Colete Amarelo (${quantidadeAmarelo})`;
-
-        document.getElementById("titulo-azul")
-        .innerText =
-            `Lista do Colete Azul (${quantidadeAzul})`;
-
-        document.getElementById("titulo-verde")
-        .innerText =
-            `Lista do Colete Verde (${quantidadeVerde})`;
+        renderizarAlunos(todosAlunos);
 
     } finally {
 
@@ -456,3 +498,5 @@ window.editarAluno = editarAluno;
 window.selecionarColete = selecionarColete;
 
 window.alternarTag = alternarTag;
+
+window.filtrarAlunos = filtrarAlunos;
