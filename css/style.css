@@ -641,3 +641,12 @@ button:active {
         width: 100%;
     }
 }
+
+/* BUSCA DE ALUNOS */
+
+#buscar-aluno {
+
+    margin-top: 10px;
+
+    font-size: 15px;
+}
