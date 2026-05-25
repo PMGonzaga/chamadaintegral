@@ -172,6 +172,16 @@ async function carregarAlunos() {
 
                 </div>
             `;
+
+            document.getElementById(
+                "btn-salvar-chamada-lista"
+            ).style.display = "none";
+
+        } else {
+
+            document.getElementById(
+                "btn-salvar-chamada-lista"
+            ).style.display = "block";
         }
 
     } finally {
