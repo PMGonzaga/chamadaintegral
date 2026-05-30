@@ -672,3 +672,64 @@ button:active {
 
     max-width: 100%;
 }
+
+/* VISUALIZAR SENHA */
+
+.input-senha {
+
+    position: relative;
+
+    width: 100%;
+}
+
+.input-senha input {
+
+    padding-right: 50px;
+}
+
+.btn-visualizar-senha {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 10px;
+
+    transform: translateY(-50%);
+
+    width: 34px;
+
+    height: 34px;
+
+    min-width: 34px;
+
+    border-radius: 8px;
+
+    margin-top: 5px;
+
+    padding: 0;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    font-size: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.btn-visualizar-senha:hover {
+
+    background: #f3f4f6;
+
+    opacity: 1;
+}
+
+.btn-visualizar-senha:active {
+
+    transform: translateY(-50%) scale(0.95);
+}
